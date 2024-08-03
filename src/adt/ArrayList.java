@@ -1,8 +1,8 @@
 package adt;
 
 public class ArrayList<T> implements ListInterface<T>{
-    private final static int DEFAULT_SIZE = 10;
-    private int size;
+    private final static int DEFAULT_SIZE = 5;
+    private int elemCount = 0;
     private Object[] elementArray;
     
     public ArrayList(){
@@ -10,34 +10,33 @@ public class ArrayList<T> implements ListInterface<T>{
     }
     
     public ArrayList(int size){
-        this.size = size;
         this.elementArray = new Object[size];
     }
     
-    private boolean checkCapacity(){
-        return size == elementArray.length;
-    }
-    
-    private void trim(){
-    
+    private void checkCapacity(){
+        if(elemCount + 1 == elementArray.length){
+            expend();
+        }
     }
     
     private void expend(){
-        
+        Object[] newArray = new Object[elemCount + 1];
     }
 
     @Override
     public int size() {
-        return size;
+        return elemCount;
     }
     
     @Override
     public boolean add(T e) {
+        elemCount++;
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     @Override
     public boolean add(int index, T e){
+        elemCount++;
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -48,19 +47,20 @@ public class ArrayList<T> implements ListInterface<T>{
 
     @Override
     public T remove(int index) {
+        if(index < elemCount){
+            T result = (T)elementArray[index];
+        }
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        elementArray = new Object[DEFAULT_SIZE];
+        elemCount = 0;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elemCount == 0;
     }
-    
-    
-    
 }
