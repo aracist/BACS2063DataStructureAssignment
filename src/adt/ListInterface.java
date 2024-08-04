@@ -19,7 +19,7 @@ public interface ListInterface<T> {
      * @param e element to be added
      * @return {@code true} if successfully added
      */
-    boolean add(int index, T e);
+    boolean add(T e, int index);
     
     /**Retrieve element at given index in this list.
      * 

@@ -1,26 +1,29 @@
 package adt;
 
+import java.util.Objects;
+
 public class ArrayList<T> implements ListInterface<T>{
     private final static int DEFAULT_SIZE = 5;
     private int elemCount = 0;
-    private Object[] elementArray;
+    private T[] elemArray;
     
     public ArrayList(){
         this(DEFAULT_SIZE);
     }
     
-    public ArrayList(int size){
-        this.elementArray = new Object[size];
+    public ArrayList(int capacity){
+        this.elemArray = (T[]) new Object[capacity];
     }
     
     private void checkCapacity(){
-        if(elemCount + 1 == elementArray.length){
-            expend();
-        }
+        if(elemCount + 1 == elemArray.length)
+            expend(DEFAULT_SIZE);
     }
     
-    private void expend(){
-        Object[] newArray = new Object[elemCount + 1];
+    private void expend(int size){
+        T[] newArray = (T[]) new Object[elemArray.length + size];
+        System.arraycopy(elemArray, 0, newArray, 0, elemArray.length);
+        elemArray = newArray;
     }
 
     @Override
@@ -30,32 +33,42 @@ public class ArrayList<T> implements ListInterface<T>{
     
     @Override
     public boolean add(T e) {
+        checkCapacity();
+        elemArray[elemCount] = e;
         elemCount++;
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elemArray[elemCount-1] == e;
     }
     
     @Override
-    public boolean add(int index, T e){
+    public boolean add(T e, int index){
+        Objects.checkIndex(index, elemCount);
+        checkCapacity();
+        elemArray[index] = e;
         elemCount++;
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return true;
     }
 
     @Override
     public T get(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Objects.checkIndex(index, elemCount);
+        return (T)elemArray[index];
     }
 
     @Override
     public T remove(int index) {
-        if(index < elemCount){
-            T result = (T)elementArray[index];
-        }
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Objects.checkIndex(index, elemCount);
+        T result = (T)elemArray[index];
+        T[] newArray = (T[]) new Object[elemArray.length];
+        System.arraycopy(elemArray, 0, newArray, 0, index);
+        System.arraycopy(elemArray, index + 1, newArray, index, elemCount-index);
+        elemArray = newArray;
+        elemCount--;
+        return result;
     }
 
     @Override
     public void clear() {
-        elementArray = new Object[DEFAULT_SIZE];
+        elemArray = (T[]) new Object[DEFAULT_SIZE];
         elemCount = 0;
     }
 
