@@ -12,7 +12,9 @@ public class MainProgram {
         System.out.println(arr.get(2));
         System.out.println(arr.remove(2));
         System.out.println(arr.get(2));
-        System.out.println(arr.remove(2));
+        System.out.println(arr.remove(3));
+        System.out.println(arr.remove(3));
+        arr.get(10);
     }
     
 }
