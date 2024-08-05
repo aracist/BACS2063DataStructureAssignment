@@ -27,11 +27,10 @@ public class ArrayList<T> implements ListInterface<T>{
     }
 
     @Override
-    public boolean add(T entry) {
+    public void add(T entry) {
         checkCapacity();
         entryArray[entryCount] = entry;
         entryCount++;
-        return entryArray[entryCount-1] == entry;
     }
     
     @Override

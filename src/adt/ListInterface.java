@@ -3,9 +3,8 @@ public interface ListInterface<T> {
     /**Adds a new entry into list.
      * 
      * @param entry entry to be added
-     * @return {@code true} if successfully added
      */
-    boolean add(T entry);
+    void add(T entry);
     
     /**Adds a new entry into list.
      * 
