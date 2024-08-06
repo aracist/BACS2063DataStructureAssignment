@@ -1,4 +1,5 @@
 package adt;
+import java.util.Objects;
 
 public class LinkedList<T> implements ListInterface<T> {
     private int entryCount;
@@ -17,6 +18,13 @@ public class LinkedList<T> implements ListInterface<T> {
         }
     }
     
+    private Node<T> getNode(int position){
+        Node<T> current = firstNode;
+        for(int i = 0; i < position; i++)
+            current = current.next;
+        return current;
+    }
+    
     @Override
     public void add(T entry) {
         Node<T> newNode = new Node<>(lastNode, entry, null);
@@ -26,21 +34,31 @@ public class LinkedList<T> implements ListInterface<T> {
             lastNode.next = newNode;
 
         lastNode = newNode;
+        entryCount++;
     }
 
     @Override
-    public boolean add(T entry, int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void add(T entry, int position) {
+        Objects.checkIndex(position, entryCount);
+        Node<T> current = getNode(position);
+        Node<T> newEntry = new Node<>(current.prev, entry, current);
+        current.prev.next = newEntry;
+        current.prev = newEntry;
+        entryCount++;
     }
 
     @Override
-    public boolean replace(T e, int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void replace(T e, int position) {
+        Objects.checkIndex(position, entryCount);
+        Node<T> currentNode = getNode(position);
+        currentNode.entry = e;
     }
 
     @Override
-    public T get(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public T get(int position) {
+        Objects.checkIndex(position, entryCount);
+        Node<T> currentNode = getNode(position);
+        return currentNode.entry;
     }
 
     @Override
@@ -49,7 +67,7 @@ public class LinkedList<T> implements ListInterface<T> {
     }
 
     @Override
-    public T remove(int index) {
+    public T remove(int position) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -70,4 +88,16 @@ public class LinkedList<T> implements ListInterface<T> {
         return entryCount == 0;
     }
     
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        Node<T> currentNode = firstNode;
+        str.append(String.format("[%2s] %s", 1, currentNode.entry));
+        
+        for(int i = 2; i <= entryCount; i++){
+            currentNode = currentNode.next;
+            str.append(String.format("[%2s] %s", i, currentNode.entry));
+        }
+        return str.toString();
+    }
 }

@@ -15,6 +15,10 @@ public class ArrayList<T> implements ListInterface<T>{
         this.entryArray = (T[]) new Object[capacity];
     }
     
+    private T[] getEntryArray(){
+        return entryArray;
+    }
+    
     private void checkCapacity(){
         if(entryCount == entryArray.length)
             expend(DEFAULT_SIZE);
@@ -26,6 +30,15 @@ public class ArrayList<T> implements ListInterface<T>{
         entryArray = newArray;
     }
 
+    public void append(ArrayList<T> anotherArray){
+        int newSize = anotherArray.size() + entryCount;
+        if(newSize > entryArray.length){
+            expend(entryArray.length - newSize);
+        }
+        System.arraycopy(anotherArray.getEntryArray(), 0, entryArray, entryCount, anotherArray.size());
+        entryCount = newSize;
+    }
+    
     @Override
     public void add(T entry) {
         checkCapacity();
@@ -34,40 +47,26 @@ public class ArrayList<T> implements ListInterface<T>{
     }
     
     @Override
-    public boolean add(T entry, int index){
-        index--;
-        try{
-            Objects.checkIndex(index, entryCount);
-        }catch(Exception ex){
-            return false;
-        }
+    public void add(T entry, int position){
+        position--;
+        Objects.checkIndex(position, entryCount);
         checkCapacity();
-        entryArray[index] = entry;
+        entryArray[position] = entry;
         entryCount++;
-        return true;
     }
 
     @Override
-    public boolean replace(T entry, int index){
-        index--;
-        try{
-            Objects.checkIndex(index, entryCount);
-        }catch(Exception ex){
-            return false;
-        }
-        entryArray[index] = entry;
-        return true;
+    public void replace(T entry, int position){
+        position--;
+        Objects.checkIndex(position, entryCount);    
+        entryArray[position] = entry;
     }
     
     @Override
-    public T get(int index) {
-        index--;
-        try{
-            Objects.checkIndex(index, entryCount);
-        }catch(Exception ex){
-            return null;
-        }
-        return (T)entryArray[index];
+    public T get(int position) {
+        position--;
+        Objects.checkIndex(position, entryCount);
+        return (T)entryArray[position];
     }
     
     @Override
@@ -80,16 +79,12 @@ public class ArrayList<T> implements ListInterface<T>{
     }
 
     @Override
-    public T remove(int index) {
-        index--;
-        try{
-            Objects.checkIndex(index, entryCount);
-        }catch(Exception ex){
-            return null;
-        }
-        T result = (T)entryArray[index];
+    public T remove(int position) {
+        position--;
+        Objects.checkIndex(position, entryCount);
+        T result = (T)entryArray[position];
         entryCount--;
-        System.arraycopy(entryArray, index+1, entryArray, index, entryCount - index);
+        System.arraycopy(entryArray, position+1, entryArray, position, entryCount - position);
 
         return result;
     }
@@ -108,5 +103,14 @@ public class ArrayList<T> implements ListInterface<T>{
     @Override
     public boolean isEmpty() {
         return entryCount == 0;
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        for(int i = 0; i < entryCount; i++){
+            str.append(String.format("[%2s] %s\n",i+1,entryArray[i]));
+        }
+        return str.toString();
     }
 }

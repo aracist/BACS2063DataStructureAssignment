@@ -1,4 +1,7 @@
 package adt;
+
+import java.util.Collection;
+
 public interface ListInterface<T> {
     /**Adds a new entry into list.
      * 
@@ -8,28 +11,31 @@ public interface ListInterface<T> {
     
     /**Adds a new entry into list.
      * 
-     * @param index position to be inserted, starting from 1.
+     * @param position position to be inserted, starting from 1.
      * @param entry entry to be added
-     * @return {@code true} if successfully added
      */
-    boolean add(T entry, int index);
+    void add(T entry, int position);
     
-    /**Replace existing entry at {@code index} with given entry.
+    /**Appends the entries in the given list to the end of this list.
      * 
-     * @param index position to be inserted, starting from 1.
-     * @param e entry to replace the existing entry.
-     * @return {@code true} if successfully replaced;
-     * {@code false} if no preexisting entry at given index.
+     * @param anoterList a list to be appended to the end of this list.
      */
-    boolean replace(T e, int index);
+    //void append(Collection<? extends T> anoterList);
+    
+    /**Replace existing entry at {@code position} with given entry.
+     * 
+     * @param position position to be inserted, starting from 1.
+     * @param e entry to replace the existing entry.
+     */
+    void replace(T e, int position);
     
     //==========================================================================
-    /**Retrieve entry at given index in this list.
+    /**Retrieve entry at given position in this list.
      * 
-     * @param index entry to be added, starting from 1.
-     * @return the entry with the given index in this list
+     * @param position entry to be added, starting from 1.
+     * @return the entry with the given position in this list
      */
-    T get(int index);
+    T get(int position);
     
     /**Check if this list contains given entry.
      * 
@@ -39,14 +45,14 @@ public interface ListInterface<T> {
     boolean contains(T elem);
     
     //==========================================================================
-    /**Removes and return entry at the given index in the list.
-     * Element at the given index is returned and removed. 
+    /**Removes and return entry at the given position in the list.
+     * Element at the given position is returned and removed. 
      * All entries after the removed entry is shifted left.
      * 
-     * @param index entry to be removed, starting from 1.
-     * @return the entry with the given index in the list
+     * @param position entry to be removed, starting from 1.
+     * @return the entry with the given position in the list
      */
-    T remove(int index);
+    T remove(int position);
     
     //==========================================================================
     /**Get the number of entries within this list
