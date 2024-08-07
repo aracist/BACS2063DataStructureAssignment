@@ -1,5 +1,6 @@
 package adt;
 
+import java.util.Collection;
 import java.util.Objects;
 
 public class ArrayList<T> implements ListInterface<T>{
@@ -29,15 +30,6 @@ public class ArrayList<T> implements ListInterface<T>{
         System.arraycopy(entryArray, 0, newArray, 0, entryArray.length);
         entryArray = newArray;
     }
-
-    public void append(ArrayList<T> anotherArray){
-        int newSize = anotherArray.size() + entryCount;
-        if(newSize > entryArray.length){
-            expend(entryArray.length - newSize);
-        }
-        System.arraycopy(anotherArray.getEntryArray(), 0, entryArray, entryCount, anotherArray.size());
-        entryCount = newSize;
-    }
     
     @Override
     public void add(T entry) {
@@ -55,6 +47,38 @@ public class ArrayList<T> implements ListInterface<T>{
         entryCount++;
     }
 
+    @Override
+    public void addAll(Collection<? extends T> anotherCollection) {
+        addAll(entryCount, anotherCollection, 0, anotherCollection.size());
+    }
+
+    @Override
+    public void addAll(int position, Collection<? extends T> anotherCollection) {
+        addAll(position, anotherCollection, 0, anotherCollection.size());
+    }
+
+    @Override
+    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition) {
+        addAll(position, anotherCollection, startingPosition, anotherCollection.size());
+    }
+
+    @Override
+    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
+        int collectionSize = anotherCollection.size();
+        position--;
+        Objects.checkIndex(position, entryCount);
+        startingPosition--;
+        Objects.checkIndex(startingPosition, collectionSize);
+        stoppingPosition--;
+        Objects.checkIndex(stoppingPosition, collectionSize);
+        int newSize = collectionSize + entryCount;
+        if(newSize > entryArray.length){
+            expend(entryArray.length - newSize);
+        }
+        System.arraycopy(anotherCollection.toArray(), startingPosition, entryArray, position, stoppingPosition - startingPosition + 1);
+        entryCount = newSize;
+    }
+    
     @Override
     public void replace(T entry, int position){
         position--;

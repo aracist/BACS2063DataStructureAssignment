@@ -1,10 +1,12 @@
 package adt;
+import java.util.Collection;
 import java.util.Objects;
 
 public class LinkedList<T> implements ListInterface<T> {
     private int entryCount;
     Node<T> firstNode;
     Node<T> lastNode;
+
     
     private static class Node<T>{
         T entry;
@@ -47,6 +49,26 @@ public class LinkedList<T> implements ListInterface<T> {
         entryCount++;
     }
 
+    @Override
+    public void addAll(Collection<? extends T> anotherCollection) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void addAll(int position, Collection<? extends T> anotherCollection) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
     @Override
     public void replace(T e, int position) {
         Objects.checkIndex(position, entryCount);
@@ -92,11 +114,11 @@ public class LinkedList<T> implements ListInterface<T> {
     public String toString(){
         StringBuilder str = new StringBuilder();
         Node<T> currentNode = firstNode;
-        str.append(String.format("[%2s] %s", 1, currentNode.entry));
+        str.append(String.format("[%2s] %s\n", 1, currentNode.entry));
         
         for(int i = 2; i <= entryCount; i++){
             currentNode = currentNode.next;
-            str.append(String.format("[%2s] %s", i, currentNode.entry));
+            str.append(String.format("[%2s] %s\n", i, currentNode.entry));
         }
         return str.toString();
     }
