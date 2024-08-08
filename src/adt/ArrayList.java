@@ -29,13 +29,6 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     }
     
     @Override
-    public Object[] toArray(){
-        Object[] result = new Object[elementCount];
-        System.arraycopy(elementArray, 0, result, 0, elementCount);
-        return result;
-    }
-    
-    @Override
     public void add(T element) {
         checkCapacity();
         elementArray[elementCount] = element;
@@ -43,7 +36,7 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     }
     
     @Override
-    public void add(T element, int position){
+    public void add(int position, T element){
         position--;
         Objects.checkIndex(position, elementCount);
         checkCapacity();
@@ -76,14 +69,14 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         Objects.checkIndex(stoppingPosition, collectionSize);
         int newSize = collectionSize + elementCount;
         if(newSize > elementArray.length){
-            expend(elementArray.length - newSize);
+            expend(Math.abs(elementArray.length - newSize));
         }
         System.arraycopy(anotherCollection.toArray(), startingPosition, elementArray, position, stoppingPosition - startingPosition + 1);
         elementCount = newSize;
     }
     
     @Override
-    public void replace(T element, int position){
+    public void replace(int position, T element){
         position--;
         Objects.checkIndex(position, elementCount);    
         elementArray[position] = element;
@@ -97,9 +90,18 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     }
     
     @Override
+    public int indexOf(T element){
+        for(int i = 0; i < elementCount; i++){
+            if(elementArray[i].equals(element))
+                return i+1;
+        }
+        return -1;
+    };
+    
+    @Override
     public boolean contains(T element){
         for(int i = 0; i < elementCount; i++){
-            if(elementArray[i] == element)
+            if(elementArray[i].equals(element))
                 return true;
         }
         return false;
@@ -130,6 +132,13 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     @Override
     public boolean isEmpty() {
         return elementCount == 0;
+    }
+    
+    @Override
+    public Object[] toArray(){
+        Object[] result = new Object[elementCount];
+        System.arraycopy(elementArray, 0, result, 0, elementCount);
+        return result;
     }
     
     @Override

@@ -12,7 +12,23 @@ public interface ListInterface<T>{
      * @param position position (inclusive) to be inserted, starting from 1.
      * @param element element to be added
      */
-    void add(T element, int position);
+    void add(int position, T element);
+    
+    /**Adds a new element into list.
+     * 
+     * @param element element to be added
+     */
+    default void addFirst(T element){
+        add(1, element);
+    };
+    
+    /**Adds a new element into list.
+     * 
+     * @param element element to be added
+     */
+    default void addLast(T element){
+        add(element);
+    };
     
     /**Appends the entries in the given collection to the end of this list.
      * 
@@ -51,7 +67,7 @@ public interface ListInterface<T>{
      * @param position position to be inserted, starting from 1.
      * @param e element to replace the existing element.
      */
-    void replace(T e, int position);
+    void replace(int position, T e);
     
     //==========================================================================
     /**Retrieve element at given position in this list.
@@ -60,6 +76,13 @@ public interface ListInterface<T>{
      * @return the element with the given position in this list
      */
     T get(int position);
+    
+    /**Return the position where the element is first found.
+     * 
+     * @param element position of element to retrieve, starting from 1.
+     * @return the position of element; -1 if it does not exist in this list.
+     */
+    int indexOf(T element);
     
     /**Check if this list contains given element.
      * 
