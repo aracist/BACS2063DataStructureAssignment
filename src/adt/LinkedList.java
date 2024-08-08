@@ -1,21 +1,20 @@
 package adt;
-import java.util.Collection;
 import java.util.Objects;
 
 public class LinkedList<T> implements ListInterface<T> {
-    private int entryCount;
+    private int elementCount;
     Node<T> firstNode;
     Node<T> lastNode;
 
     
     private static class Node<T>{
-        T entry;
+        T element;
         Node<T> prev;
         Node<T> next;
         
-        Node(Node<T> prev, T entry, Node<T> next){
+        Node(Node<T> prev, T element, Node<T> next){
             this.prev = prev;
-            this.entry = entry;
+            this.element = element;
             this.next = next;
         }
     }
@@ -28,59 +27,59 @@ public class LinkedList<T> implements ListInterface<T> {
     }
     
     @Override
-    public void add(T entry) {
-        Node<T> newNode = new Node<>(lastNode, entry, null);
+    public void add(T element) {
+        Node<T> newNode = new Node<>(lastNode, element, null);
         if (firstNode == null) 
             firstNode = newNode;
         else
             lastNode.next = newNode;
 
         lastNode = newNode;
-        entryCount++;
+        elementCount++;
     }
 
     @Override
-    public void add(T entry, int position) {
-        Objects.checkIndex(position, entryCount);
+    public void add(T element, int position) {
+        Objects.checkIndex(position, elementCount);
         Node<T> current = getNode(position);
-        Node<T> newEntry = new Node<>(current.prev, entry, current);
+        Node<T> newEntry = new Node<>(current.prev, element, current);
         current.prev.next = newEntry;
         current.prev = newEntry;
-        entryCount++;
+        elementCount++;
     }
 
     @Override
-    public void addAll(Collection<? extends T> anotherCollection) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void addAll(CollectionInterface<? extends T> anotherCollection) {
+        addAll(elementCount, anotherCollection, 0, anotherCollection.size());
     }
 
     @Override
-    public void addAll(int position, Collection<? extends T> anotherCollection) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void addAll(int position, CollectionInterface<? extends T> anotherCollection) {
+        addAll(position, anotherCollection, 0, anotherCollection.size());
     }
 
     @Override
-    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition) {
+        addAll(position, anotherCollection, startingPosition, anotherCollection.size());
     }
 
     @Override
-    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
+    public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     @Override
     public void replace(T e, int position) {
-        Objects.checkIndex(position, entryCount);
+        Objects.checkIndex(position, elementCount);
         Node<T> currentNode = getNode(position);
-        currentNode.entry = e;
+        currentNode.element = e;
     }
 
     @Override
     public T get(int position) {
-        Objects.checkIndex(position, entryCount);
+        Objects.checkIndex(position, elementCount);
         Node<T> currentNode = getNode(position);
-        return currentNode.entry;
+        return currentNode.element;
     }
 
     @Override
@@ -95,30 +94,30 @@ public class LinkedList<T> implements ListInterface<T> {
 
     @Override
     public int size() {
-        return entryCount;
+        return elementCount;
     }
 
     @Override
     public void clear() {
         firstNode = null;
         lastNode = null;
-        entryCount = 0;
+        elementCount = 0;
     }
 
     @Override
     public boolean isEmpty() {
-        return entryCount == 0;
+        return elementCount == 0;
     }
     
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
         Node<T> currentNode = firstNode;
-        str.append(String.format("[%2s] %s\n", 1, currentNode.entry));
+        str.append(String.format("[%2s] %s\n", 1, currentNode.element));
         
-        for(int i = 2; i <= entryCount; i++){
+        for(int i = 2; i <= elementCount; i++){
             currentNode = currentNode.next;
-            str.append(String.format("[%2s] %s\n", i, currentNode.entry));
+            str.append(String.format("[%2s] %s\n", i, currentNode.element));
         }
         return str.toString();
     }

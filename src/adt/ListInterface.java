@@ -1,26 +1,24 @@
 package adt;
 
-import java.util.Collection;
-
 public interface ListInterface<T>{
-    /**Adds a new entry into list.
+    /**Adds a new element into list.
      * 
-     * @param entry entry to be added
+     * @param element element to be added
      */
-    void add(T entry);
+    void add(T element);
     
-    /**Adds a new entry into list.
+    /**Adds a new element into list.
      * 
      * @param position position (inclusive) to be inserted, starting from 1.
-     * @param entry entry to be added
+     * @param element element to be added
      */
-    void add(T entry, int position);
+    void add(T element, int position);
     
     /**Appends the entries in the given collection to the end of this list.
      * 
      * @param anotherCollection a collection to be appended to the end of this list.
      */
-    void addAll(Collection<? extends T> anotherCollection);
+    void addAll(CollectionInterface<? extends T> anotherCollection);
     
     /**Appends the entries in the given collection to the end of this list.
      * 
@@ -29,7 +27,7 @@ public interface ListInterface<T>{
      * @param position the position (inclusive) in this list to start inserting the entries into.
      * @param anotherCollection a collection to be appended to the end of this list.
      */
-    void addAll(int position, Collection<? extends T> anotherCollection);
+    void addAll(int position, CollectionInterface<? extends T> anotherCollection);
     
     /**Appends the entries in the given collection to the end of this list.
      * 
@@ -37,7 +35,7 @@ public interface ListInterface<T>{
      * @param anotherCollection a collection to be appended to the end of this list.
      * @param startingPosition the position (inclusive) in the given collection to start copying from.
      */
-    void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition);
+    void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition);
     
     /**Appends the entries in the given collection to the end of this list.
      * 
@@ -46,37 +44,37 @@ public interface ListInterface<T>{
      * @param startingPosition the position (inclusive) in the given collection to start copying from
      * @param stoppingPosition the position (inclusive) in the given collection to copy until.
      */
-    void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition, int stoppingPosition);
+    void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition);
     
-    /**Replace existing entry at {@code position} with given entry.
+    /**Replace existing element at {@code position} with given element.
      * 
      * @param position position to be inserted, starting from 1.
-     * @param e entry to replace the existing entry.
+     * @param e element to replace the existing element.
      */
     void replace(T e, int position);
     
     //==========================================================================
-    /**Retrieve entry at given position in this list.
+    /**Retrieve element at given position in this list.
      * 
-     * @param position position of entry to retrieve, starting from 1.
-     * @return the entry with the given position in this list
+     * @param position position of element to retrieve, starting from 1.
+     * @return the element with the given position in this list
      */
     T get(int position);
     
-    /**Check if this list contains given entry.
+    /**Check if this list contains given element.
      * 
-     * @param elem entry to be checked if present in this list.
-     * @return {@code true} if given entry can be found within the list.
+     * @param elem element to be checked if present in this list.
+     * @return {@code true} if given element can be found within the list.
      */
     boolean contains(T elem);
     
     //==========================================================================
-    /**Removes and return entry at the given position in the list.
+    /**Removes and return element at the given position in the list.
      * Element at the given position is returned and removed. 
-     * All entries after the removed entry is shifted left.
+     * All entries after the removed element is shifted left.
      * 
-     * @param position position of entry to be removed, starting from 1.
-     * @return the entry with the given position in the list
+     * @param position position of element to be removed, starting from 1.
+     * @return the element with the given position in the list
      */
     T remove(int position);
     
@@ -87,7 +85,7 @@ public interface ListInterface<T>{
      */
     int size();
     
-    /**Removes all entry from list.
+    /**Removes all element from list.
      */
     void clear();
     

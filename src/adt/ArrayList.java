@@ -1,102 +1,105 @@
 package adt;
 
-import java.util.Collection;
 import java.util.Objects;
 
-public class ArrayList<T> implements ListInterface<T>{
+public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     private final static int DEFAULT_SIZE = 5;
-    private int entryCount = 0;
-    private T[] entryArray;
+    private int elementCount = 0;
+    private T[] elementArray;
     
     public ArrayList(){
         this(DEFAULT_SIZE);
     }
     
     public ArrayList(int capacity){
-        this.entryArray = (T[]) new Object[capacity];
-    }
-    
-    private T[] getEntryArray(){
-        return entryArray;
+        this.elementArray = (T[]) new Object[capacity];
     }
     
     private void checkCapacity(){
-        if(entryCount == entryArray.length)
+        if(elementCount == elementArray.length)
             expend(DEFAULT_SIZE);
     }
     
     private void expend(int size){
-        T[] newArray = (T[]) new Object[entryArray.length + size];
-        System.arraycopy(entryArray, 0, newArray, 0, entryArray.length);
-        entryArray = newArray;
+        System.out.println("size: "+size);
+        System.out.println("New size: "+(elementArray.length+size));
+        T[] newArray = (T[]) new Object[elementArray.length + size];
+        System.arraycopy(elementArray, 0, newArray, 0, elementArray.length);
+        elementArray = newArray;
     }
     
     @Override
-    public void add(T entry) {
+    public Object[] toArray(){
+        Object[] result = new Object[elementCount];
+        System.arraycopy(elementArray, 0, result, 0, elementCount);
+        return result;
+    }
+    
+    @Override
+    public void add(T element) {
         checkCapacity();
-        entryArray[entryCount] = entry;
-        entryCount++;
+        elementArray[elementCount] = element;
+        elementCount++;
     }
     
     @Override
-    public void add(T entry, int position){
+    public void add(T element, int position){
         position--;
-        Objects.checkIndex(position, entryCount);
+        Objects.checkIndex(position, elementCount);
         checkCapacity();
-        entryArray[position] = entry;
-        entryCount++;
+        elementArray[position] = element;
+        elementCount++;
     }
 
     @Override
-    public void addAll(Collection<? extends T> anotherCollection) {
-        addAll(entryCount, anotherCollection, 0, anotherCollection.size());
+    public void addAll(CollectionInterface<? extends T> anotherCollection) {
+        addAll(elementCount, anotherCollection, 1, anotherCollection.size());
     }
 
     @Override
-    public void addAll(int position, Collection<? extends T> anotherCollection) {
+    public void addAll(int position, CollectionInterface<? extends T> anotherCollection) {
         addAll(position, anotherCollection, 0, anotherCollection.size());
     }
 
     @Override
-    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition) {
+    public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition) {
         addAll(position, anotherCollection, startingPosition, anotherCollection.size());
     }
 
     @Override
-    public void addAll(int position, Collection<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
+    public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
         int collectionSize = anotherCollection.size();
-        position--;
-        Objects.checkIndex(position, entryCount);
+        Objects.checkIndex(position, elementCount+1);
         startingPosition--;
         Objects.checkIndex(startingPosition, collectionSize);
         stoppingPosition--;
         Objects.checkIndex(stoppingPosition, collectionSize);
-        int newSize = collectionSize + entryCount;
-        if(newSize > entryArray.length){
-            expend(entryArray.length - newSize);
+        int newSize = collectionSize + elementCount;
+        if(newSize > elementArray.length){
+            expend(elementArray.length - newSize);
         }
-        System.arraycopy(anotherCollection.toArray(), startingPosition, entryArray, position, stoppingPosition - startingPosition + 1);
-        entryCount = newSize;
+        System.arraycopy(anotherCollection.toArray(), startingPosition, elementArray, position, stoppingPosition - startingPosition + 1);
+        elementCount = newSize;
     }
     
     @Override
-    public void replace(T entry, int position){
+    public void replace(T element, int position){
         position--;
-        Objects.checkIndex(position, entryCount);    
-        entryArray[position] = entry;
+        Objects.checkIndex(position, elementCount);    
+        elementArray[position] = element;
     }
     
     @Override
     public T get(int position) {
         position--;
-        Objects.checkIndex(position, entryCount);
-        return (T)entryArray[position];
+        Objects.checkIndex(position, elementCount);
+        return (T)elementArray[position];
     }
     
     @Override
-    public boolean contains(T entry){
-        for(int i = 0; i < entryCount; i++){
-            if(entryArray[i] == entry)
+    public boolean contains(T element){
+        for(int i = 0; i < elementCount; i++){
+            if(elementArray[i] == element)
                 return true;
         }
         return false;
@@ -105,35 +108,35 @@ public class ArrayList<T> implements ListInterface<T>{
     @Override
     public T remove(int position) {
         position--;
-        Objects.checkIndex(position, entryCount);
-        T result = (T)entryArray[position];
-        entryCount--;
-        System.arraycopy(entryArray, position+1, entryArray, position, entryCount - position);
+        Objects.checkIndex(position, elementCount);
+        T result = (T)elementArray[position];
+        elementCount--;
+        System.arraycopy(elementArray, position+1, elementArray, position, elementCount - position);
 
         return result;
     }
     
     @Override
     public int size() {
-        return entryCount;
+        return elementCount;
     }
     
     @Override
     public void clear() {
-        entryArray = (T[]) new Object[DEFAULT_SIZE];
-        entryCount = 0;
+        elementArray = (T[]) new Object[DEFAULT_SIZE];
+        elementCount = 0;
     }
 
     @Override
     public boolean isEmpty() {
-        return entryCount == 0;
+        return elementCount == 0;
     }
     
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
-        for(int i = 0; i < entryCount; i++){
-            str.append(String.format("[%2s] %s\n",i+1,entryArray[i]));
+        for(int i = 0; i < elementCount; i++){
+            str.append(String.format("[%2s] %s\n",i+1,elementArray[i]));
         }
         return str.toString();
     }
