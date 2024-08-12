@@ -5,36 +5,36 @@ package adt;
  * @author User
  */
 public class Stack<T> implements StackInterface<T>{
-    
+    LinkedList<T> elementStack = new LinkedList<>();
     
     @Override
-    public void push() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void push(T element) {
+        elementStack.addFirst(element);
     }
 
     @Override
     public T pop() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elementStack.removeFirst();
     }
 
     @Override
     public T peek() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elementStack.getFirst();
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elementStack.size();
     }
 
     @Override
-    public boolean clear() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void clear() {
+        elementStack = new LinkedList<>();
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elementStack.size() == 0;
     }
     
 }

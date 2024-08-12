@@ -1,10 +1,10 @@
 package adt;
 
 public interface StackInterface<T> {
-    void push();
+    void push(T element);
     T pop();
     T peek();
     int size();
-    boolean clear();
+    void clear();
     boolean isEmpty();
 }

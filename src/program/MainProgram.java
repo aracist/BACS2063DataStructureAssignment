@@ -12,6 +12,9 @@ public class MainProgram {
         arr.add("three");
         
         arr.addAll(arr);
+        
+        for(String s : arr)
+            System.out.println(s);
 
         ArrayList<String> arr2 = new ArrayList<>();
         arr2.addAll(arr);

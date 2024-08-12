@@ -1,20 +1,20 @@
 package adt;
 
 public interface ListInterface<T>{
-    /**Adds a new element into list.
+    /**Adds a new element into this list.
      * 
      * @param element element to be added
      */
     void add(T element);
     
-    /**Adds a new element into list.
+    /**Adds a new element into this list at specified position.
      * 
      * @param position position (inclusive) to be inserted, starting from 1.
      * @param element element to be added
      */
     void add(int position, T element);
     
-    /**Adds a new element into list.
+    /**Adds a new element to the front of this list.
      * 
      * @param element element to be added
      */
@@ -22,7 +22,7 @@ public interface ListInterface<T>{
         add(1, element);
     };
     
-    /**Adds a new element into list.
+    /**Adds a new element to the end of this list.
      * 
      * @param element element to be added
      */
@@ -30,32 +30,32 @@ public interface ListInterface<T>{
         add(element);
     };
     
-    /**Appends the entries in the given collection to the end of this list.
+    /**Appends the elements in the given collection to the end of this list.
      * 
      * @param anotherCollection a collection to be appended to the end of this list.
      */
     void addAll(CollectionInterface<? extends T> anotherCollection);
     
-    /**Appends the entries in the given collection to the end of this list.
+    /**Appends the elements in the given collection to the end of this list.
      * 
      * Positions starts from 1
      * 
-     * @param position the position (inclusive) in this list to start inserting the entries into.
+     * @param position the position (inclusive) in this list to start inserting the elements into.
      * @param anotherCollection a collection to be appended to the end of this list.
      */
     void addAll(int position, CollectionInterface<? extends T> anotherCollection);
     
-    /**Appends the entries in the given collection to the end of this list.
+    /**Appends the elements in the given collection to the end of this list.
      * 
-     * @param position the position (inclusive) in this list to start inserting the entries into.
+     * @param position the position (inclusive) in this list to start inserting the elements into.
      * @param anotherCollection a collection to be appended to the end of this list.
      * @param startingPosition the position (inclusive) in the given collection to start copying from.
      */
     void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition);
     
-    /**Appends the entries in the given collection to the end of this list.
+    /**Appends the elements in the given collection to the end of this list.
      * 
-     * @param position the position (inclusive) in this list to start inserting the entries into.
+     * @param position the position (inclusive) in this list to start inserting the elements into.
      * @param anotherCollection a collection to be appended to the end of this list.
      * @param startingPosition the position (inclusive) in the given collection to start copying from
      * @param stoppingPosition the position (inclusive) in the given collection to copy until.
@@ -77,6 +77,22 @@ public interface ListInterface<T>{
      */
     T get(int position);
     
+    /**Retrieve the first element in this list.
+     * 
+     * @return the first element in this list
+     */
+    default T getFirst(){
+        return get(1);
+    };
+    
+    /**Retrieve the last element in this list.
+     * 
+     * @return the last element in this list
+     */
+    default T getLast(){
+        return get(size());
+    };
+    
     /**Return the position where the element is first found.
      * 
      * @param element position of element to retrieve, starting from 1.
@@ -94,17 +110,37 @@ public interface ListInterface<T>{
     //==========================================================================
     /**Removes and return element at the given position in the list.
      * Element at the given position is returned and removed. 
-     * All entries after the removed element is shifted left.
+     * All elements after the removed element is shifted left.
      * 
      * @param position position of element to be removed, starting from 1.
      * @return the element with the given position in the list
      */
     T remove(int position);
     
-    //==========================================================================
-    /**Get the number of entries within this list
+    /**Removes and return the first element in the list.
+     * Element at the given position is returned and removed. 
+     * All elements after the removed element is shifted left.
      * 
-     * @return the number of entries within this list.
+     * @return the first element in the list
+     */
+    default T removeFirst(){
+        return remove(1);
+    };
+    
+    /**Removes and return the first element in the list.
+     * Element at the given position is returned and removed. 
+     * All elements after the removed element is shifted left.
+     * 
+     * @return the first element in the list
+     */
+    default T removeLast(){
+        return remove(size());
+    };
+    
+    //==========================================================================
+    /**Get the number of elements within this list
+     * 
+     * @return the number of elements within this list.
      */
     int size();
     

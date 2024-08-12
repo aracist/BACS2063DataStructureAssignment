@@ -1,8 +1,9 @@
 package adt;
 
+import java.util.Iterator;
 import java.util.Objects;
 
-public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
+public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>, Iterable<T>{
     private final static int DEFAULT_SIZE = 5;
     private int elementCount = 0;
     private T[] elementArray;
@@ -26,6 +27,11 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         T[] newArray = (T[]) new Object[elementArray.length + size];
         System.arraycopy(elementArray, 0, newArray, 0, elementArray.length);
         elementArray = newArray;
+    }
+    
+    @Override
+    public Iterator<T> iterator() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     @Override
