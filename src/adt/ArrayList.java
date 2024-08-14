@@ -3,7 +3,7 @@ package adt;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>, Iterable<T>{
+public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     private final static int DEFAULT_SIZE = 5;
     private int elementCount = 0;
     private T[] elementArray;
@@ -22,16 +22,29 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>, I
     }
     
     private void expend(int size){
-        System.out.println("size: "+size);
-        System.out.println("New size: "+(elementArray.length+size));
         T[] newArray = (T[]) new Object[elementArray.length + size];
         System.arraycopy(elementArray, 0, newArray, 0, elementArray.length);
         elementArray = newArray;
     }
+    private class Itr implements Iterator<T>{
+        int current = 1;
+        
+        Itr(){}
+        
+        @Override
+        public boolean hasNext() {
+            return current == elementCount;
+        }
+
+        @Override
+        public T next() {
+            return elementArray[current++];
+        }
+    }
     
     @Override
     public Iterator<T> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return new Itr();
     }
     
     @Override
@@ -145,6 +158,32 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>, I
         Object[] result = new Object[elementCount];
         System.arraycopy(elementArray, 0, result, 0, elementCount);
         return result;
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+        if (obj == this)
+            return true;
+        
+        if (!(obj instanceof ArrayList<?>))
+            return false;
+        
+        return equalsArrayList((ArrayList<?>) obj);
+    }
+    
+    private boolean equalsArrayList(ArrayList<?> other){
+        if (other.elementCount != elementCount)
+            return false;
+        
+        if (other.elementArray.getClass() != elementArray.getClass())
+            return false;
+       
+        for(int i = 0; i < elementCount ; i++){
+            if(!other.elementArray[i].equals(elementArray[i])){
+                return false;
+            }     
+        }
+        return true;
     }
     
     @Override
