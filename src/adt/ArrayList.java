@@ -165,10 +165,12 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         if (obj == this)
             return true;
         
-        if (!(obj instanceof ArrayList<?>))
+        if (!(obj instanceof CollectionInterface<?>))
             return false;
         
-        return equalsArrayList((ArrayList<?>) obj);
+        return (obj.getClass() == this.getClass() 
+                ? equalsArrayList((ArrayList<?>) obj)
+                : equalsCollection((CollectionInterface) obj));
     }
     
     private boolean equalsArrayList(ArrayList<?> other){
@@ -183,6 +185,16 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
                 return false;
             }     
         }
+        return true;
+    }
+    
+    private boolean equalsCollection(CollectionInterface other){
+        if(other.size() != elementCount)
+            return false;
+        
+        Iterator<?> otherIterator = other.iterator();
+        
+        
         return true;
     }
     

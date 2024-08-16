@@ -1,4 +1,5 @@
 package adt;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class LinkedList<T> implements ListInterface<T>, CollectionInterface<T> {
@@ -34,6 +35,29 @@ public class LinkedList<T> implements ListInterface<T>, CollectionInterface<T> {
                 current = current.prev;
         }
         return current;
+    }
+    private class Itr implements Iterator<T>{
+        int currentIndex = 0;
+        Node currentNode = firstNode;
+        
+        Itr(){}
+        
+        @Override
+        public boolean hasNext() {
+            return currentIndex < elementCount;
+        }
+
+        @Override
+        public T next() {
+            currentIndex++;
+            currentNode = currentNode.next;
+            return (T)currentNode.element;
+        }
+    }
+    
+    @Override
+    public Iterator<T> iterator() {
+        return new Itr();
     }
     
     @Override
