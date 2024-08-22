@@ -26,25 +26,26 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         System.arraycopy(elementArray, 0, newArray, 0, elementArray.length);
         elementArray = newArray;
     }
+    
+    @Override
+    public Iterator<T> iterator() {
+        return new Itr();
+    }
+    
     private class Itr implements Iterator<T>{
-        int current = 1;
+        int current = 0;
         
         Itr(){}
         
         @Override
         public boolean hasNext() {
-            return current == elementCount;
+            return current != elementCount;
         }
 
         @Override
         public T next() {
             return elementArray[current++];
         }
-    }
-    
-    @Override
-    public Iterator<T> iterator() {
-        return new Itr();
     }
     
     @Override
