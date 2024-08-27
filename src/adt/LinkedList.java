@@ -37,8 +37,8 @@ public class LinkedList<T> implements ListInterface<T>, CollectionInterface<T> {
         return current;
     }
     private class Itr implements Iterator<T>{
-        int currentIndex = 0;
-        Node currentNode = firstNode;
+        int currentIndex;
+        Node currentNode;
         
         Itr(){}
         
@@ -49,8 +49,13 @@ public class LinkedList<T> implements ListInterface<T>, CollectionInterface<T> {
 
         @Override
         public T next() {
-            currentIndex++;
-            currentNode = currentNode.next;
+            if (currentNode != null){
+                currentIndex++;
+                currentNode = currentNode.next;
+            }else{
+                currentIndex = 1;
+                currentNode = firstNode;
+            }
             return (T)currentNode.element;
         }
     }

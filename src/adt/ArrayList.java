@@ -21,6 +21,7 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
             expend(DEFAULT_SIZE);
     }
     
+    //Create a new bigger array
     private void expend(int size){
         T[] newArray = (T[]) new Object[elementArray.length + size];
         System.arraycopy(elementArray, 0, newArray, 0, elementArray.length);
@@ -193,8 +194,12 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         if(other.size() != elementCount)
             return false;
         
-        Iterator<?> otherIterator = other.iterator();
+        Iterator<?> otherItr = other.iterator();
         
+        for(int i = 0; i < elementCount && otherItr.hasNext(); i++){
+            if(!elementArray[i].equals(otherItr.next()))
+                return false;
+        }
         
         return true;
     }
