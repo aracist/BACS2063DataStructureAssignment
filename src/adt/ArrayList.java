@@ -97,11 +97,11 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     @Override
     public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
         int collectionSize = anotherCollection.size();
+        
         Objects.checkIndex(position, elementCount+1);
-        startingPosition--;
-        Objects.checkIndex(startingPosition, collectionSize);
-        stoppingPosition--;
-        Objects.checkIndex(stoppingPosition, collectionSize);
+        Objects.checkIndex(--startingPosition, collectionSize);
+        Objects.checkIndex(--stoppingPosition, collectionSize);
+        
         int newSize = collectionSize + elementCount;
         if(newSize > elementArray.length){
             expend(Math.abs(elementArray.length - newSize));
