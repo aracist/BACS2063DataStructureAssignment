@@ -114,16 +114,14 @@ public class LinkedList<T> implements ListInterface<T>, CollectionInterface<T> {
     @Override
     public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
         Node<T> currentNode = getNode(position);
-        Node<T> endingNode = currentNode.next;
         
         Object[] arr = anotherCollection.toArray();
-        for(Object elem : arr){
-            Node<T> newNode = new Node<>(currentNode, (T)elem, currentNode.next);
-            currentNode.next = newNode;
+        for(int i = 0 ; i < stoppingPosition; i++){
+            Node<T> newNode = new Node<>(currentNode, (T)arr[i], currentNode.next);
             currentNode.next.prev = newNode;
+            currentNode.next = newNode;
             currentNode = newNode;
         }
-        //endingNode.prev = currentNode;
         elementCount += arr.length;
     }
     

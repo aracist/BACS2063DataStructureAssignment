@@ -1,9 +1,10 @@
 package adt;
 
 public interface QueueInterface<T> {
-    void enqueue();
+    void enqueue(T data);
     T dequeue();
     T getFront();
-    boolean clear();
+    int size();
+    void clear();
     boolean isEmpty();
 }

@@ -1,7 +1,7 @@
 package adt;
 
 public interface StackInterface<T> {
-    void push(T element);
+    void push(T data);
     T pop();
     T peek();
     int size();

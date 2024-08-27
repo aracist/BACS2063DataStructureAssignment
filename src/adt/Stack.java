@@ -8,8 +8,8 @@ public class Stack<T> implements StackInterface<T>{
     LinkedList<T> elementStack = new LinkedList<>();
     
     @Override
-    public void push(T element) {
-        elementStack.addFirst(element);
+    public void push(T data) {
+        elementStack.addFirst(data);
     }
 
     @Override

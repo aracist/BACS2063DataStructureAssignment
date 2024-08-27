@@ -10,6 +10,8 @@ public class MainProgram {
         arr.add("one");
         arr.add("two");
         arr.add("three");
+        arr.add(2, "soup");
+        arr.add(1, "rice");
         
         arr.addAll(arr);
         
@@ -23,23 +25,28 @@ public class MainProgram {
 //        System.out.println(arr.remove(2));
 //        System.out.println(arr.get(2));
 //        System.out.println(arr.remove(3));
-        System.out.println(arr2.toString());
+        System.out.println(arr.toString());
 
-        LinkedList<String> ll = new LinkedList<>();
-        ll.add("Nou");
-        ll.add("Ya");
-        ll.add("Fkin");
-        ll.add("Dum");
-        ll.add("Dummy");
-        ll.add("Dumbo");
-        ll.add(6, "seh");
-        ll.replace(3, "gae");
-        System.out.println(ll.toString());
-        System.out.println(ll.remove(3));
-
-        //rr2.addAll(ll);
-        ll.addAll(arr2);
-        System.out.println(ll.toString());
+//        LinkedList<String> ll = new LinkedList<>();
+//        ll.add("Nou");
+//        ll.add("Ya");
+//        ll.add("Fkin");
+//        ll.add("Dum");
+//        ll.add("Dummy");
+//        ll.add("Dumbo");
+//        ll.add(6, "seh");
+//        ll.replace(3, "gai");
+//        System.out.println(ll.toString());
+//        System.out.println(ll.remove(3));
+//
+//        //rr2.addAll(ll);
+//        ll.addAll(arr2);
+//        arr.clear();
+//        arr.addAll(ll);
+//        System.out.println(ll.toString());
+//        for(String s : ll)
+//            System.out.println(s);
+//        System.out.println(arr.equals(ll));
     }
     
 }

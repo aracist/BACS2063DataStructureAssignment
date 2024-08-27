@@ -21,7 +21,7 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
             expend(DEFAULT_SIZE);
     }
     
-    //Create a new bigger array
+    //Create expend into a bigger array
     private void expend(int size){
         T[] newArray = (T[]) new Object[elementArray.length + size];
         System.arraycopy(elementArray, 0, newArray, 0, elementArray.length);
@@ -47,21 +47,35 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         public T next() {
             return elementArray[current++];
         }
+        
+        @Override
+        public void remove(){
+            ArrayList.this.remove(current+1);
+            current--;
+        }
     }
     
     @Override
-    public void add(T element) {
-        checkCapacity();
-        elementArray[elementCount] = element;
-        elementCount++;
+    public void add(T data) {
+        add(elementCount, data);
     }
     
     @Override
-    public void add(int position, T element){
-        position--;
-        Objects.checkIndex(position, elementCount);
-        checkCapacity();
-        elementArray[position] = element;
+    public void add(int position, T data){
+       if(elementCount != 0){
+            //if insert at index 0 with 0 elementCount will cause error 
+            Objects.checkIndex(position-1, elementCount);
+            checkCapacity();
+        }
+        
+        //only shift elements to right if position is not at end of array
+        if(position != elementCount){
+            position--;
+            System.arraycopy(elementArray, position,
+                    elementArray, position+1,
+                    elementCount - position);
+        }
+        elementArray[position] = data;
         elementCount++;
     }
 
@@ -97,10 +111,10 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     }
     
     @Override
-    public void replace(int position, T element){
+    public void replace(int position, T data){
         position--;
         Objects.checkIndex(position, elementCount);    
-        elementArray[position] = element;
+        elementArray[position] = data;
     }
     
     @Override
@@ -111,18 +125,18 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     }
     
     @Override
-    public int indexOf(T element){
+    public int indexOf(T data){
         for(int i = 0; i < elementCount; i++){
-            if(elementArray[i].equals(element))
+            if(elementArray[i].equals(data))
                 return i+1;
         }
         return -1;
     };
     
     @Override
-    public boolean contains(T element){
+    public boolean contains(T data){
         for(int i = 0; i < elementCount; i++){
-            if(elementArray[i].equals(element))
+            if(elementArray[i].equals(data))
                 return true;
         }
         return false;
@@ -130,12 +144,11 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
 
     @Override
     public T remove(int position) {
-        position--;
-        Objects.checkIndex(position, elementCount);
-        T result = (T)elementArray[position];
+        T result = get(position);
         elementCount--;
-        System.arraycopy(elementArray, position+1, elementArray, position, elementCount - position);
-
+        System.arraycopy(elementArray, position, 
+                elementArray, --position, 
+                elementCount - position);// shift element to left
         return result;
     }
     

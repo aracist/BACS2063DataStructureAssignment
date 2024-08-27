@@ -1,150 +1,150 @@
 package adt;
 
 public interface ListInterface<T>{
-    /**Adds a new element into this list.
+    /**Adds a new data into this list.
      * 
-     * @param element element to be added
+     * @param data data to be added
      */
-    void add(T element);
+    void add(T data);
     
-    /**Adds a new element into this list at specified position.
+    /**Adds a new data into this list at specified position.
      * 
      * @param position position (inclusive) to be inserted, starting from 1.
-     * @param element element to be added
+     * @param data data to be added
      */
-    void add(int position, T element);
+    void add(int position, T data);
     
-    /**Adds a new element to the front of this list.
+    /**Adds a new data to the front of this list.
      * 
-     * @param element element to be added
+     * @param data data to be added
      */
-    default void addFirst(T element){
-        add(1, element);
+    default void addFirst(T data){
+        add(1, data);
     };
     
-    /**Adds a new element to the end of this list.
+    /**Adds a new data to the end of this list.
      * 
-     * @param element element to be added
+     * @param data data to be added
      */
-    default void addLast(T element){
-        add(element);
+    default void addLast(T data){
+        add(data);
     };
     
-    /**Appends the elements in the given collection to the end of this list.
+    /**Appends the data in the given collection to the end of this list.
      * 
      * @param anotherCollection a collection to be appended to the end of this list.
      */
     void addAll(CollectionInterface<? extends T> anotherCollection);
     
-    /**Appends the elements in the given collection to the end of this list.
+    /**Appends the data in the given collection to the end of this list.
      * 
      * Positions starts from 1
      * 
-     * @param position the position (inclusive) in this list to start inserting the elements into.
+     * @param position the position (inclusive) in this list to start inserting the data into.
      * @param anotherCollection a collection to be appended to the end of this list.
      */
     void addAll(int position, CollectionInterface<? extends T> anotherCollection);
     
-    /**Appends the elements in the given collection to the end of this list.
+    /**Appends the data in the given collection to the end of this list.
      * 
-     * @param position the position (inclusive) in this list to start inserting the elements into.
+     * @param position the position (inclusive) in this list to start inserting the data into.
      * @param anotherCollection a collection to be appended to the end of this list.
      * @param startingPosition the position (inclusive) in the given collection to start copying from.
      */
     void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition);
     
-    /**Appends the elements in the given collection to the end of this list.
+    /**Appends the data in the given collection to the end of this list.
      * 
-     * @param position the position (inclusive) in this list to start inserting the elements into.
+     * @param position the position (inclusive) in this list to start inserting the data into.
      * @param anotherCollection a collection to be appended to the end of this list.
      * @param startingPosition the position (inclusive) in the given collection to start copying from
      * @param stoppingPosition the position (inclusive) in the given collection to copy until.
      */
     void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition);
     
-    /**Replace existing element at {@code position} with given element.
+    /**Replace existing data at {@code position} with given data.
      * 
      * @param position position to be inserted, starting from 1.
-     * @param e element to replace the existing element.
+     * @param e data to replace the existing data.
      */
     void replace(int position, T e);
     
     //==========================================================================
-    /**Retrieve element at given position in this list.
+    /**Retrieve data at given position in this list.
      * 
-     * @param position position of element to retrieve, starting from 1.
-     * @return the element with the given position in this list
+     * @param position position of data to retrieve, starting from 1.
+     * @return the data with the given position in this list
      */
     T get(int position);
     
-    /**Retrieve the first element in this list.
+    /**Retrieve the first data in this list.
      * 
-     * @return the first element in this list
+     * @return the first data in this list
      */
     default T getFirst(){
         return get(1);
     };
     
-    /**Retrieve the last element in this list.
+    /**Retrieve the last data in this list.
      * 
-     * @return the last element in this list
+     * @return the last data in this list
      */
     default T getLast(){
         return get(size());
     };
     
-    /**Return the position where the element is first found.
+    /**Return the position where the data is first found.
      * 
-     * @param element position of element to retrieve, starting from 1.
-     * @return the position of element; -1 if it does not exist in this list.
+     * @param data position of data to retrieve, starting from 1.
+     * @return the position of data; -1 if it does not exist in this list.
      */
-    int indexOf(T element);
+    int indexOf(T data);
     
-    /**Check if this list contains given element.
+    /**Check if this list contains given data.
      * 
-     * @param elem element to be checked if present in this list.
-     * @return {@code true} if given element can be found within the list.
+     * @param elem data to be checked if present in this list.
+     * @return {@code true} if given data can be found within the list.
      */
     boolean contains(T elem);
     
     //==========================================================================
-    /**Removes and return element at the given position in the list.
-     * Element at the given position is returned and removed. 
-     * All elements after the removed element is shifted left.
+    /**Removes and return data at the given position in the list.
+     * data at the given position is returned and removed. 
+     * All data after the removed data is shifted left.
      * 
-     * @param position position of element to be removed, starting from 1.
-     * @return the element with the given position in the list
+     * @param position position of data to be removed, starting from 1.
+     * @return the data with the given position in the list
      */
     T remove(int position);
     
-    /**Removes and return the first element in the list.
-     * Element at the given position is returned and removed. 
-     * All elements after the removed element is shifted left.
+    /**Removes and return the first data in the list.
+     * data at the given position is returned and removed. 
+     * All data after the removed data is shifted left.
      * 
-     * @return the first element in the list
+     * @return the first data in the list
      */
     default T removeFirst(){
         return remove(1);
     };
     
-    /**Removes and return the first element in the list.
-     * Element at the given position is returned and removed. 
-     * All elements after the removed element is shifted left.
+    /**Removes and return the first data in the list.
+     * data at the given position is returned and removed. 
+     * All data after the removed data is shifted left.
      * 
-     * @return the first element in the list
+     * @return the first data in the list
      */
     default T removeLast(){
         return remove(size());
     };
     
     //==========================================================================
-    /**Get the number of elements within this list
+    /**Get the number of data within this list
      * 
-     * @return the number of elements within this list.
+     * @return the number of data within this list.
      */
     int size();
     
-    /**Removes all element from list.
+    /**Removes all data from list.
      */
     void clear();
     
