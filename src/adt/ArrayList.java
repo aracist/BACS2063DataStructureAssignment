@@ -81,12 +81,15 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
 
     @Override
     public void addAll(CollectionInterface<? extends T> anotherCollection) {
-        addAll(elementCount, anotherCollection, 1, anotherCollection.size());
+        if(isEmpty())
+            addAll(1, anotherCollection, 1, anotherCollection.size());
+        else
+            addAll(elementCount, anotherCollection, 1, anotherCollection.size());
     }
 
     @Override
     public void addAll(int position, CollectionInterface<? extends T> anotherCollection) {
-        addAll(position, anotherCollection, 0, anotherCollection.size());
+        addAll(position, anotherCollection, 1, anotherCollection.size());
     }
 
     @Override
@@ -95,18 +98,23 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     }
 
     @Override
-    public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition) {
+    public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int length) {
         int collectionSize = anotherCollection.size();
-        
-        Objects.checkIndex(position, elementCount+1);
+        T[] collectionArr = (T[])anotherCollection.toArray();
+        //check if positions are in bound
+        Objects.checkIndex(--position, elementCount+1); //+1 to make it possible to be added at end of array
         Objects.checkIndex(--startingPosition, collectionSize);
-        Objects.checkIndex(--stoppingPosition, collectionSize);
         
-        int newSize = collectionSize + elementCount;
+        //make sure lenght is <= num of elements after startingPosition
+        Objects.checkIndex(length, collectionSize - startingPosition + 1);
+        
+        int newSize = length + elementCount;
         if(newSize > elementArray.length){
             expend(Math.abs(elementArray.length - newSize));
         }
-        System.arraycopy(anotherCollection.toArray(), startingPosition, elementArray, position, stoppingPosition - startingPosition + 1);
+        
+        System.arraycopy(elementArray, position, elementArray, position + length, elementCount - position);
+        System.arraycopy(collectionArr, startingPosition, elementArray, position, length);
         elementCount = newSize;
     }
     
