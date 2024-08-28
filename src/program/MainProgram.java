@@ -13,7 +13,8 @@ public class MainProgram {
         arr.add(2, "soup");
         arr.add(1, "rice");
         
-        arr.addAll(arr);
+        System.out.println(arr.toString());
+        arr.addAll(3,arr, 4, 2);
         
         for(String s : arr)
             System.out.println(s);
