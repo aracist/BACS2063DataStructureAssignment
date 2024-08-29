@@ -4,7 +4,7 @@ public class PriorityQueue<T> implements QueueInterface<T>{
     private ArrayList<T> heap;
     private int elementCount;
     
-    PriorityQueue(){
+    public PriorityQueue(){
         heap = new ArrayList<>();
         elementCount = 0;
     }

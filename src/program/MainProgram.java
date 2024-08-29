@@ -14,10 +14,10 @@ public class MainProgram {
         arr.add(1, "rice");
         
         System.out.println(arr.toString());
-        arr.addAll(3,arr, 4, 2);
+        arr.addAll(3,arr,4,3);
         
-        for(String s : arr)
-            System.out.println(s);
+//        for(String s : arr)
+//            System.out.println(s);
 
         ArrayList<String> arr2 = new ArrayList<>();
         arr2.addAll(arr);
@@ -28,26 +28,29 @@ public class MainProgram {
 //        System.out.println(arr.remove(3));
         System.out.println(arr.toString());
 
-//        LinkedList<String> ll = new LinkedList<>();
+        LinkedList<String> ll = new LinkedList<>();
 //        ll.add("Nou");
 //        ll.add("Ya");
 //        ll.add("Fkin");
 //        ll.add("Dum");
 //        ll.add("Dummy");
 //        ll.add("Dumbo");
-//        ll.add(6, "seh");
+//        ll.add(7 ,"seh");
 //        ll.replace(3, "gai");
 //        System.out.println(ll.toString());
 //        System.out.println(ll.remove(3));
+//        System.out.println(ll.toString());
+//        
+//        ll.addAll(ll);
+//        System.out.println(ll.toString());
 //
 //        //rr2.addAll(ll);
-//        ll.addAll(arr2);
+        ll.addAll(arr2);
 //        arr.clear();
 //        arr.addAll(ll);
-//        System.out.println(ll.toString());
-//        for(String s : ll)
-//            System.out.println(s);
-//        System.out.println(arr.equals(ll));
+        for(String s : ll)
+            System.out.println(s);
+        System.out.println(ll.equals(ll));
     }
     
 }

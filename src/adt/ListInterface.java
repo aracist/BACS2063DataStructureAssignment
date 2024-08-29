@@ -34,33 +34,58 @@ public interface ListInterface<T>{
      * 
      * @param anotherCollection a collection to be appended to the end of this list.
      */
-    void addAll(CollectionInterface<? extends T> anotherCollection);
+    default void addAll(CollectionInterface<? extends T> anotherCollection){
+        //pass in 1 as position if elementCount = 0
+        addAll(anotherCollection, 1, anotherCollection.size());
+    };
     
     /**Appends the data in the given collection to the end of this list.
+     * 
+     * @param anotherCollection a collection to be appended to the end of this list.
+     * @param startingPosition the position (inclusive) in the given collection to start copying from.
+     */
+    default void addAll(CollectionInterface<? extends T> anotherCollection, int startingPosition){
+        addAll(anotherCollection, startingPosition, anotherCollection.size() - startingPosition + 1);
+    };
+    
+    /**Appends the data in the given collection to the end of this list.
+     * 
+     * @param anotherCollection a collection to be appended to the end of this list.
+     * @param startingPosition the position (inclusive) in the given collection to start copying from.
+     * @param length the amount of elements to copy.
+     */
+    void addAll(CollectionInterface<? extends T> anotherCollection, int startingPosition, int length);
+    
+    /**Appends the data in the given collection to a given position in this list.
      * 
      * Positions starts from 1
      * 
      * @param position the position (inclusive) in this list to start inserting the data into.
      * @param anotherCollection a collection to be appended to the end of this list.
      */
-    void addAll(int position, CollectionInterface<? extends T> anotherCollection);
+    default void addAll(int position, CollectionInterface<? extends T> anotherCollection){
+         addAll(position, anotherCollection, 1, anotherCollection.size());
+    };
     
-    /**Appends the data in the given collection to the end of this list.
+    /**Appends the data in the given collection to a given position in this list.
      * 
      * @param position the position (inclusive) in this list to start inserting the data into.
      * @param anotherCollection a collection to be appended to the end of this list.
      * @param startingPosition the position (inclusive) in the given collection to start copying from.
      */
-    void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition);
+    default void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition){
+        addAll(position, anotherCollection, startingPosition, anotherCollection.size() - startingPosition + 1);
+    };
     
-    /**Appends the data in the given collection to the end of this list.
+    
+    /**Appends the data in the given collection to a given position in this list.
      * 
      * @param position the position (inclusive) in this list to start inserting the data into.
      * @param anotherCollection a collection to be appended to the end of this list.
-     * @param startingPosition the position (inclusive) in the given collection to start copying from
-     * @param stoppingPosition the position (inclusive) in the given collection to copy until.
+     * @param startingPosition the position (inclusive) in the given collection to start copying from.
+     * @param length the amount of elements to copy.
      */
-    void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int stoppingPosition);
+    void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int length);
     
     /**Replace existing data at {@code position} with given data.
      * 

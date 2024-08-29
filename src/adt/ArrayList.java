@@ -78,35 +78,22 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         elementArray[position] = data;
         elementCount++;
     }
-
+    
     @Override
-    public void addAll(CollectionInterface<? extends T> anotherCollection) {
-        if(isEmpty())
-            addAll(1, anotherCollection, 1, anotherCollection.size());
-        else
-            addAll(elementCount, anotherCollection, 1, anotherCollection.size());
-    }
-
-    @Override
-    public void addAll(int position, CollectionInterface<? extends T> anotherCollection) {
-        addAll(position, anotherCollection, 1, anotherCollection.size());
-    }
-
-    @Override
-    public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition) {
-        addAll(position, anotherCollection, startingPosition, anotherCollection.size());
-    }
+    public void addAll(CollectionInterface<? extends T> anotherCollection, int startingPosition, int length){
+        addAll((elementCount == 0)?1:elementCount+1, anotherCollection, startingPosition, length);
+    };
 
     @Override
     public void addAll(int position, CollectionInterface<? extends T> anotherCollection, int startingPosition, int length) {
-        int collectionSize = anotherCollection.size();
         T[] collectionArr = (T[])anotherCollection.toArray();
+        
         //check if positions are in bound
         Objects.checkIndex(--position, elementCount+1); //+1 to make it possible to be added at end of array
-        Objects.checkIndex(--startingPosition, collectionSize);
+        Objects.checkIndex(--startingPosition, collectionArr.length);
         
-        //make sure lenght is <= num of elements after startingPosition
-        Objects.checkIndex(length, collectionSize - startingPosition + 1);
+        //make sure lenght is <= count of elements after startingPosition
+        Objects.checkIndex(length, collectionArr.length - startingPosition + 1);
         
         int newSize = length + elementCount;
         if(newSize > elementArray.length){
@@ -217,7 +204,7 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         
         Iterator<?> otherItr = other.iterator();
         
-        for(int i = 0; i < elementCount && otherItr.hasNext(); i++){
+        for(int i = 0; i < elementCount; i++){
             if(!elementArray[i].equals(otherItr.next()))
                 return false;
         }
