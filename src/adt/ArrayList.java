@@ -133,7 +133,7 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
     }
     
     @Override
-    public int indexOf(T data){
+    public int positionOf(T data){
         for(int i = 0; i < elementCount; i++){
             if(elementArray[i].equals(data))
                 return i+1;
