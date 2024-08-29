@@ -98,7 +98,7 @@ public interface ListInterface<T>{
      * @param data position of data to retrieve, starting from 1.
      * @return the position of data; -1 if it does not exist in this list.
      */
-    int indexOf(T data);
+    int positionOf(T data);
     
     /**Check if this list contains given data.
      * 

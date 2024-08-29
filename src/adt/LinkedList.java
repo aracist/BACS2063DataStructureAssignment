@@ -139,7 +139,7 @@ public class LinkedList<T> implements ListInterface<T>, CollectionInterface<T> {
     }
 
     @Override
-    public int indexOf(T element){
+    public int positionOf(T element){
         Node<T> currentNode = firstNode;
         if(currentNode.element.equals(element))
             return 1;
