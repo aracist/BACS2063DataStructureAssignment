@@ -28,6 +28,10 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         }
     }
     
+    public static <T> ListInterface<T> asList(T... a) { 
+        return new ArrayList<>(a); 
+    }
+    
     private void checkCapacity(){
         if(elementCount == elementArray.length)
             expend(DEFAULT_SIZE);
