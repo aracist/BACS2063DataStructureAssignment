@@ -16,6 +16,18 @@ public class ArrayList<T> implements ListInterface<T>, CollectionInterface<T>{
         this.elementArray = (T[]) new Object[capacity];
     }
     
+    public ArrayList(T[] arr){
+        this(arr.length);
+        
+        for (int i = 0; i < arr.length; i++){
+            if (arr[i] == null)
+                break;
+            
+            elementArray[i] = arr[i];
+            elementCount++;
+        }
+    }
+    
     private void checkCapacity(){
         if(elementCount == elementArray.length)
             expend(DEFAULT_SIZE);
