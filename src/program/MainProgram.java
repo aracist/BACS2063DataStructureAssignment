@@ -64,8 +64,20 @@ public class MainProgram {
         rbt.add(18);
         rbt.add(16);
         rbt.add(17);
+//        rbt.add(6);
+//        rbt.add(40);
+//        rbt.add(10);
+//        rbt.add(19);
+//        rbt.add(20);
+//        rbt.add(11);
+//        rbt.add(8);
         rbt.inOrder();
         System.out.println(rbt.toString());
+        System.out.println(rbt.get(12));
+        
+        for(Object o : rbt.toArray()){
+            System.out.print((int)o+" ");
+        }
     }
     
 }

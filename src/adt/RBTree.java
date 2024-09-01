@@ -1,6 +1,7 @@
 package adt;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public class RBTree<T> implements CollectionInterface<T>{
     RBNode root;
@@ -35,6 +36,12 @@ public class RBTree<T> implements CollectionInterface<T>{
         }
         boolean isRight(){
             return parent.right==this;
+        }
+        boolean hasTwoChild(){
+            return (left != null && right != null);
+        }
+        boolean hasNoChild(){
+            return (left == null && right == null);
         }
     }
     
@@ -125,6 +132,7 @@ public class RBTree<T> implements CollectionInterface<T>{
                 return;
             }
             
+            //check if parent is a left or right child
             char side = (pNode.isLeft()) ? 'L' : 'R';
             if(sameDirection){
                 rotateSameDirection(side, pNode);
@@ -246,38 +254,98 @@ public class RBTree<T> implements CollectionInterface<T>{
         revColor(pNode);
         revColor(target);
         //in case target node became root
-        if(target.parent == null){
+        if(target.isRoot()){
             target.color = 'B';
             root = target;
         } 
     }
-    
-    public T remove(){
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+    private RBNode getNode(RBNode currentNode, int hash){        
+        if(currentNode == null)
+            return null;
+
+        //less than current node
+        else if(hash < currentNode.hash)
+            currentNode = getNode(currentNode.left, hash);
+
+        //more than current node
+        else if(hash > currentNode.hash)
+            currentNode = getNode(currentNode.right, hash);
+        
+        
+        return currentNode;
     }
     
-    public T get(int position){
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public T get(int hash){
+        RBNode result = getNode(root, hash);
+        return (result == null)?null:result.data;
+    }
+    
+    private RBNode getLargestNode(RBNode currentNode){        
+        if(currentNode.right != null)
+            currentNode = getLargestNode(currentNode.right);
+        
+        return currentNode;
+    }
+    
+    public T remove(int hash){
+        RBNode target = getNode(root, hash);
+        
+        if(target == null)
+            return null;
+        else if (target == root)
+            clear();
+        
+        RBNode pNode = target.parent;
+        RBNode successor;
+        T result = target.data;
+
+        //if target is leaf && has parent
+        if(target.hasNoChild()){
+            if(target.isLeft())
+                pNode.left = null;
+            else
+                pNode.right = null;
+        }
+        
+            
+        if(!target.hasTwoChild())
+            successor = (target.left != null) ? target.left : target.right;
+        else 
+            successor = getLargestNode(target.left);
+        
+        //copying data of successor to target
+        target.hash = successor.hash;
+        target.data = successor.data;
+        
+        //rebalance tree if removing successor is black
+        if(successor.color == 'B')
+            removeBalance(successor);
+        
+        //removing successor from tree
+        if(successor.isLeft())
+            successor.parent.left = null;
+        else
+            successor.parent.right = null;
+        
+        
+        elementCount --;
+        return result;
+    }
+    
+    private void removeBalance(RBNode target){
+        RBNode uncle;
+        if(!target.isRoot()){
+            if(target.isLeft())
+                uncle = target.parent.right;
+            else
+                uncle = target.parent.left;
+            
+            
+        }
     }
     
     private class Itr implements Iterator<T>{
-//        T[] arr;
-//        int count;
-//        
-//        Itr(){
-//            arr = (T[])RBTree.this.toArray();
-//            count = 0;
-//        }
-//        
-//        @Override
-//        public boolean hasNext() {
-//            return count != elementCount;
-//        }
-//
-//        @Override
-//        public T next() {
-//            return arr[count++];
-//        }
         RBNode prevNode;
         RBNode currentNode;
         int count;
@@ -287,8 +355,10 @@ public class RBTree<T> implements CollectionInterface<T>{
         }
         
         private void toLeftest(){
-            while(currentNode.left != null)
+            if(currentNode.left != null){
                 currentNode = currentNode.left;
+                toLeftest();
+            }
         }
         
         @Override
@@ -306,7 +376,7 @@ public class RBTree<T> implements CollectionInterface<T>{
                 toLeftest();
             }else{
                 currentNode = currentNode.parent;
-                if(prevNode.hash > currentNode.hash){
+                while(prevNode.hash > currentNode.hash){
                     currentNode = currentNode.parent;
                 }
             }
@@ -323,19 +393,18 @@ public class RBTree<T> implements CollectionInterface<T>{
     }
     
     private void arrayNavi(ArrayList<T> arr,RBNode node) {
-        if (node == null) 
-          return;
-        
-        arrayNavi(arr, node.left);
-        arr.add(node.data);
-        arrayNavi(arr, node.right);
+        if (node != null){
+            arrayNavi(arr, node.left);
+            arr.add(node.data);
+            arrayNavi(arr, node.right);
+        }
     }
     
     @Override
     public Object[] toArray() {
         ArrayList<T> arr = new ArrayList<>(elementCount);
         arrayNavi(arr, root);
-        return arr.toArray();
+        return (T[])arr.toArray();
     }
 
     @Override
