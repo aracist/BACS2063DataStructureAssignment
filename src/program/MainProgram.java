@@ -54,27 +54,27 @@ public class MainProgram {
 //            System.out.println(s);
 //        System.out.println(ll.equals(ll));
         RBTree<Integer> rbt = new RBTree<>();
-        rbt.add(4);
-        rbt.add(7);
-        rbt.add(12);
-        rbt.add(15);
-        rbt.add(3);
-        rbt.add(5);
-        rbt.add(14);
-        rbt.add(18);
-        rbt.add(16);
-        rbt.add(17);
-//        rbt.add(6);
-//        rbt.add(40);
-//        rbt.add(10);
-//        rbt.add(19);
-//        rbt.add(20);
-//        rbt.add(11);
-//        rbt.add(8);
+//        rbt.add(4);
+//        rbt.add(7);
+//        rbt.add(12);
+//        rbt.add(15);
+//        rbt.add(3);
+//        rbt.add(5);
+//        rbt.add(14);
+//        rbt.add(18);
+//        rbt.add(16);
+//        rbt.add(17);
+        rbt.addAll(new Integer[]{4,7,12,15,3,5,14,18,16,17});
+
+        rbt.remove(3);
+        rbt.remove(12);
+        rbt.remove(17);
+        rbt.remove(18);
+        rbt.remove(15);
+        rbt.remove(16);
+        //System.out.println(rbt.toString());
+        //System.out.println(rbt.get(12));
         rbt.inOrder();
-        System.out.println(rbt.toString());
-        System.out.println(rbt.get(12));
-        
         for(Object o : rbt.toArray()){
             System.out.print((int)o+" ");
         }
