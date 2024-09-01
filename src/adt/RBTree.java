@@ -31,10 +31,10 @@ public class RBTree<T> implements CollectionInterface<T>{
             return parent==null;
         }
         boolean isLeft(){
-            return parent.left==this;
+            return (parent!=null && parent.left==this);
         }
         boolean isRight(){
-            return parent.right==this;
+            return (parent!=null && parent.right==this);
         }
         boolean hasNoChild(){
             return (left == null && right == null);
@@ -484,7 +484,10 @@ public class RBTree<T> implements CollectionInterface<T>{
           return;
         
         inOrder(node.left);
-        System.out.printf("%s(%s) ", node.data, node.color);
+        if(node.parent!=null)
+            System.out.printf("%s(%s)<p:%s> ", node.data, node.color, node.parent.data);
+        else
+            System.out.printf("%s(%s)<root> ", node.data, node.color);
         inOrder(node.right);
     }
     public void inOrder(){
