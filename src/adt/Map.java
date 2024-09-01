@@ -1,71 +1,100 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package adt;
 
-/**
- *
- * @author User
- */
 public class Map<K, V> implements MapInterface<K,V>{
-    K[] first;
-    V[] second;
+    ArrayList<K> keyArr;
+    ArrayList<V> valueArr;
+    int elementCount;
     
-    public Map(){}
-
+    public Map(){
+        keyArr = new ArrayList<>();
+        valueArr = new ArrayList<>();
+        elementCount = 0;
+    }
+    
     @Override
     public boolean containsKey(K key) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for(K k : keyArr){
+            if (k.equals(key))
+                return true;
+        }
+        return false;
     }
 
     @Override
     public boolean containsValue(V value) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for(V v : valueArr){
+            if (v.equals(value))
+                return true;
+        }
+        return false;
     }
 
     @Override
     public boolean add(K key, V value) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(containsKey(key))
+            return false;
+        
+        elementCount ++;
+        keyArr.add(key);
+        valueArr.add(value);
+        return true;
     }
 
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (int position = 1; position <= elementCount; position++){
+            if(keyArr.get(position).equals(key))
+                return valueArr.get(position);
+        }
+        return null;
     }
 
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        V result = null;
+        for (int position = 1; position <= elementCount; position++){
+            if(keyArr.get(position).equals(key)){
+                result = valueArr.get(position);
+                keyArr.remove(position);
+                valueArr.remove(position);
+                return result;
+            }
+        }
+        return result;
+   }
 
     @Override
     public K[] keyArray() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return (K[])keyArr.toArray();
     }
 
     @Override
     public V[] valueArray() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return (V[])valueArr.toArray();
     }
 
     @Override
     public Object[][] elementArray() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Object[][] result = new Object[2][elementCount];
+        result[1] = keyArray();
+        result[2] = valueArray();
+        return result;
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        keyArr = new ArrayList<>();
+        valueArr = new ArrayList<>();
+        elementCount = 0;
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elementCount;
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return elementCount == 0;
     }
 }
