@@ -54,29 +54,35 @@ public class MainProgram {
 //            System.out.println(s);
 //        System.out.println(ll.equals(ll));
         RBTree<Integer> rbt = new RBTree<>();
-        rbt.add(4);
-        rbt.add(7);
-        rbt.add(12);
-        rbt.add(15);
-        rbt.add(3);
-        rbt.add(5);
-        rbt.add(14);
-        rbt.add(18);
-        rbt.add(16);
-        rbt.add(17);
-        //rbt.addAll(new Integer[]{6,40,10,19,20,11,8});
+        rbt.insert(4);
+        rbt.insert(7);
+        rbt.insert(12);
+        rbt.insert(15);
+        rbt.insert(3);
+        rbt.insert(5);
+        rbt.insert(14);
+        rbt.insert(18);
+        rbt.insert(16);
+        rbt.insert(17);
+        rbt.insertAll(new Integer[]{6,40,10,19,20,11,8});
 
-        //rbt.remove(3);
-        //rbt.remove(12);
-        //rbt.remove(17);
-        //rbt.remove(18);
-        //rbt.remove(15);
-        rbt.remove(16);
+        rbt.delete(3);
+        rbt.delete(12);
+        rbt.delete(17);
+        rbt.delete(18);
+        rbt.delete(15);
+        rbt.delete(16);
         //System.out.println(rbt.toString());
         //System.out.println(rbt.get(12));
         rbt.inOrder();
-        for(Object o : rbt.toArray()){
-            System.out.print((int)o+" ");
+        
+        
+        
+        Object[] itarr = rbt.toArray();
+        //System.out.println(itarr.getClass());
+
+        for (Object itarr1 : itarr) {
+            System.out.println((int)itarr1);
         }
     }
     
