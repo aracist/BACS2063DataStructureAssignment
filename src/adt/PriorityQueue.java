@@ -1,81 +1,149 @@
 package adt;
 
-public class PriorityQueue<T> implements QueueInterface<T>{
-    private ArrayList<Entry> heap;
+import java.util.Iterator;
+
+public class PriorityQueue<T> implements QueueInterface<T>, CollectionInterface<T>{
+    final private RBTree<Entry> rbTree;
+    int elementCount;
     
     public PriorityQueue(){
-        heap = new ArrayList<>();
+        rbTree = new RBTree<>();
     }
     
     private class Entry{
         int importance;
-        T data;
-        int index;
+        LinkedList<T> linkedList;
         
         Entry(){}
         
-        Entry(int importance, T data, int index){
+        Entry(int importance, T data){
             this.importance = importance;
-            this.data = data;
-            this.index = index;
+            this.linkedList = new LinkedList<>();
+        }
+        
+        @Override
+        public int hashCode(){
+            return importance;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Entry other = (Entry) obj;
+            return this.importance == other.importance;
         }
     }
+
+    private class Itr implements Iterator<T>{
+        Iterator importanceItr;
+        Entry currentEntry;
+        Iterator entryItr;
+        
+        Itr(){
+            importanceItr = rbTree.iterator();
+            if(importanceItr.hasNext()){
+                currentEntry = (Entry)importanceItr.next();
+                entryItr = currentEntry.linkedList.iterator();
+            }
+        }
+        
+        @Override
+        public boolean hasNext() {
+            return importanceItr.hasNext() && entryItr.hasNext();
+        }
+
+        @Override
+        public T next() {
+            if(!entryItr.hasNext()){
+               currentEntry = (Entry)importanceItr.next();
+               entryItr = currentEntry.linkedList.iterator();
+            }
+            return (T)entryItr.next();
+        }
     
-    private int getParent(int index){
-        return Math.floorDiv(index - 1, 2);
     }
     
-    private int getLeft(int index){
-        int left = index * 2 + 1;
-        return (left < heap.size()) ? left : -1;
+    @Override
+    public Iterator<T> iterator() {
+        return new Itr();
     }
-    
-    private int getRight(int index){
-        int right = index * 2 + 2;
-        return (right < heap.size()) ? right : -1;
-    }
-    
+
     @Override
     public void enqueue(T data){
         enqueue(0, data);
     }
     
-    /**Queues an element into this queue and sort according to its importance.
-     * 
-     * @param importance the data is more important as this number increases, 
-     * e.g. 0 = least important, 1 = more important than 0.
-     * @param data the data to be stored
-     */
     public void enqueue(int importance, T data){
-        heap.addLast(new Entry(importance, data, heap.size()));
+        Entry e = rbTree.search(0);
+        if(e != null)
+            e.linkedList.addLast(data);
+        else
+            rbTree.insert(new Entry(importance, data));
         
+        elementCount++;
     }
 
     @Override
     public T dequeue() {
-        T result = getFront();
-        heap.removeFirst();
+        if(isEmpty())
+            return null;
+        
+        Entry entry = rbTree.getSmallest();
+        T result = entry.linkedList.removeFirst();
+        
+        if(entry.linkedList.isEmpty())
+            rbTree.delete(entry.hashCode());
+        elementCount--;
         return result;
     }
 
     @Override
     public T getFront() {
-        return heap.getFirst().data;
+        if(isEmpty())
+            return null;
+        
+        return rbTree.getSmallest().linkedList.getFirst();
     }
 
     @Override
     public int size() {
-        return heap.size();
+        return elementCount;
     }
     
     @Override
     public void clear() {
-        heap = new ArrayList<>();
+        rbTree.clear();
+        elementCount = 0;
     }
 
     @Override
     public boolean isEmpty() {
-        return heap.size() == 0;
+        return elementCount == 0;
     }
     
+    @Override
+    public Object[] toArray() {
+        ArrayList<T> arr = new ArrayList<>(elementCount);
+        for(T data : this)
+            arr.add(data);
+        
+        return arr.toArray();
+    }
+    
+    @Override
+    public String toString() {
+        ArrayList<T> arr = new ArrayList<>(elementCount);
+        for(T data : this)
+            arr.add(data);
+        
+        return arr.toString();
+    }
 }

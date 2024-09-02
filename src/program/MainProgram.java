@@ -64,14 +64,14 @@ public class MainProgram {
         rbt.insert(18);
         rbt.insert(16);
         rbt.insert(17);
-        rbt.insertAll(new Integer[]{6,40,10,19,20,11,8});
+        rbt.insertAll(new Integer[]{6,40,10,4,19,20,11,8});
 
-        rbt.delete(3);
-        rbt.delete(12);
-        rbt.delete(17);
-        rbt.delete(18);
-        rbt.delete(15);
-        rbt.delete(16);
+//        rbt.delete(3);
+//        rbt.delete(12);
+//        rbt.delete(17);
+//        rbt.delete(18);
+//        rbt.delete(15);
+//        rbt.delete(16);
         //System.out.println(rbt.toString());
         //System.out.println(rbt.get(12));
         rbt.inOrder();
@@ -84,6 +84,7 @@ public class MainProgram {
         for (Object itarr1 : itarr) {
             System.out.println((int)itarr1);
         }
+        System.out.println(rbt.size());
     }
     
 }

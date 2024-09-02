@@ -65,7 +65,7 @@ public class RBTree<T> implements BinaryTreeInterface<T>, CollectionInterface<T>
         }
 
         //Determine which side to append the node to 
-        RBNode newNode = new RBNode(data);
+        RBNode newNode = new RBNode<>(data);
         
         if(parent == null) 
             root = newNode;
@@ -358,18 +358,28 @@ public class RBTree<T> implements BinaryTreeInterface<T>, CollectionInterface<T>
         
     }
     
-    private void arrayNavi(ArrayList<T> arr, RBNode node) {
-        if (node != null){
-            arrayNavi(arr, node.left);
-            arr.add((T)node.data);
-            arrayNavi(arr, node.right);
+    public T getSmallest(){
+        RBNode target = root;
+        
+        if (target == null)
+            return null;
+        
+        while(target.left != null){
+            target = target.left;
         }
+        return (T)target.data;
     }
-    @Override
-    public Object[] toArray() {
-        ArrayList<T> arr = new ArrayList<>(elementCount);
-        arrayNavi(arr, root);
-        return arr.toArray();
+    
+    public T getLargest(){
+        RBNode target = root;
+        
+        if (target == null)
+            return null;
+        
+        while(target.right != null){
+            target = target.right;
+        }
+        return (T)target.data;
     }
 
     private class Itr implements Iterator<T>{
@@ -450,5 +460,26 @@ public class RBTree<T> implements BinaryTreeInterface<T>, CollectionInterface<T>
     public void inOrder(){
         System.out.printf("root is : %s(%s)\n ", root.data, root.color);
         inOrder(root);
+    }
+    
+    private void arrayNavi(ArrayList<T> arr, RBNode node) {
+        if (node != null){
+            arrayNavi(arr, node.left);
+            arr.add((T)node.data);
+            arrayNavi(arr, node.right);
+        }
+    }
+    @Override
+    public Object[] toArray() {
+        ArrayList<T> arr = new ArrayList<>(elementCount);
+        arrayNavi(arr, root);
+        return arr.toArray();
+    }
+    
+    @Override
+    public String toString(){
+        ArrayList<T> arr = new ArrayList<>(elementCount);
+        arrayNavi(arr, root);
+        return arr.toString();
     }
 }
