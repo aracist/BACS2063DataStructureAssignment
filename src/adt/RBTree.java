@@ -2,390 +2,379 @@ package adt;
 
 import java.util.Iterator;
 
-public class RBTree<T> implements CollectionInterface<T>{
-    RBNode root;
+public class RBTree<T> implements BinaryTreeInterface<T>, CollectionInterface<T> {
+    RBNode<T> root;
     int elementCount;
+    
+    static final boolean RED = false;
+    static final boolean BLACK = true;
 
-    public RBTree(){
-        root = null;
-        elementCount = 0;
+    private static class NilNode extends RBNode {
+      private NilNode() {
+        super();
+        this.color = BLACK;
+      }
     }
     
-    private class RBNode{
-        char color; //R for red, B for black
-        int hash;
-        T data;
-        RBNode parent;
-        RBNode left;
-        RBNode right;
-        
-        RBNode(){}
-        
-        RBNode(T data){
-            this.hash = data.hashCode();
-            this.data = data;
-            color = 'R';
+    @Override
+    public T search(int hash) {
+        RBNode node = root;
+        while (node != null) {
+            if (hash == node.hash) {
+              return (T)node.data;
+            } else if (hash < node.hash) {
+              node = node.left;
+            } else {
+              node = node.right;
+            }
         }
-        
-        boolean isRoot(){
-            return parent==null;
-        }
-        boolean isLeft(){
-            return (parent!=null && parent.left==this);
-        }
-        boolean isRight(){
-            return (parent!=null && parent.right==this);
-        }
-        boolean hasNoChild(){
-            return (left == null && right == null);
-        }
+
+        return null;
     }
     
-    //to reverse color of a node
-    private void revColor(RBNode target){
-        target.color = (target.color == 'R') ? 'B' : 'R';
+    // ===== Insertion =====
+    public boolean insertAll(T[] dataArr){
+        return insertAll(dataArr, 1, dataArr.length);
     }
     
-    public void addAll(T[] dataArr){
-        addAll(dataArr, 1, dataArr.length);
+    public boolean insertAll(T[] dataArr, int startingPosition){
+        return insertAll(dataArr, startingPosition, dataArr.length);
     }
     
-    public void addAll(T[] dataArr, int startingPosition){
-        addAll(dataArr, startingPosition, dataArr.length);
-    }
-    
-    public void addAll(T[] dataArr, int startingPosition, int endingPosition){
+    public boolean insertAll(T[] dataArr, int startingPosition, int endingPosition){
         for (int i = startingPosition - 1; i < endingPosition; i++) {
-            add(dataArr[i]);
-        }
-    }
-    
-    public boolean add(T data){
-        RBNode newNode = new RBNode(data);
-        RBNode currentNode = root;
-        
-        //if tree is empty
-        if(currentNode == null){
-            root = newNode;
-            root.color = 'B';
-            elementCount++;
-            return true;
-        }
-
-        do{ 
-            if(newNode.hash == currentNode.hash){
+            // Failed to insert
+            if(!insert(dataArr[i]))
                 return false;
-            }
-            
-            //less than current node
-            if(newNode.hash < currentNode.hash){
-                if(currentNode.left == null){
-                    currentNode.left = newNode;
-                    newNode.parent = currentNode;
-                    balance(newNode);
-                    elementCount++;
-                    return true;
-                }else
-                    currentNode = currentNode.left;
-            }
-            
-            //more than current node
-            if(newNode.hash > currentNode.hash){
-                if(currentNode.right == null){
-                    currentNode.right = newNode;
-                    newNode.parent = currentNode;
-                    balance(newNode);
-                    elementCount++;
-                    return true;
-                }else
-                    currentNode = currentNode.right;
-            }
-        }while(true);
+        }
+        return true;
     }
     
-    //to resolve double red node
-    private void balance(RBNode currentNode){
-        RBNode pNode = currentNode.parent; //parent node
+    @Override
+    public boolean insert(T data) {
+        RBNode node = root;
+        RBNode parent = null;
+        int hash = data.hashCode();
+
+        while (node != null) {
+            parent = node;
+            
+            if(hash < node.hash) 
+                node = node.left;
+            else if(hash > node.hash) 
+                node = node.right;
+            else 
+                return false;
+        }
+
+        //Determine which side to append the node to 
+        RBNode newNode = new RBNode(data);
         
-        if (!(currentNode.color == 'R' && pNode.color == 'R')) //only continue checking if parent is red
+        if(parent == null) 
+            root = newNode;
+        else if(hash < parent.hash) 
+            parent.left = newNode;
+        else 
+            parent.right = newNode;
+        
+        newNode.parent = parent;
+
+        fixAfterInsert(newNode);
+        elementCount++;
+        return true;
+    }
+
+    private void fixAfterInsert(RBNode node) {
+        RBNode parent = node.parent;
+
+        //Stop if node is root
+        if (parent == null) {
+            //Ensure root is black;
+            node.color = BLACK;
             return;
+        }
+
+        //Only need fixing if parent is red (Double Red Situation)
+        if (parent.color != RED)
+            return;
+      
+        RBNode gParent = parent.parent;
+      
+        //Parent is root
+        if (gParent == null) {
+            parent.color = BLACK;
+            return;
+        }
+
+        RBNode uncle = getUncle(parent);
+
+        //FOR WHEN UNCLE IS RED
+        //If uncle = null then uncle is BLACK
+        if (uncle != null && uncle.color == RED){
+            //Reverse the color
+            parent.color = BLACK;
+            gParent.color = RED;
+            uncle.color = BLACK;
+            
+            //Since gParent became red, check if it causes any double red
+            fixAfterInsert(gParent);
+        }
         
-        RBNode gpNode = pNode.parent; //grand parent node
-        RBNode uNode = null; //parent's sibling(uncle)
-        Boolean sameDirection = null; //false if psNode is left while currentNode is right of their respective parent (or vice versa) 
-        
-        //check if parent can have sibling
-        if(gpNode != null){ 
-            if(pNode.isRight()){
-                uNode = gpNode.left;
-                sameDirection = currentNode.isLeft();
-            }else{
-                uNode = gpNode.right;
-                sameDirection = currentNode.isRight();
+        //UNDER IS FOR WHEN UNCLE IS BLACK
+        //Parent is a left child
+        else if (parent == gParent.left) {
+            //Node is inner child of gParent
+            if (node == parent.right) {
+                rotateLeft(parent);
+
+                //For recoloring
+                parent = node;
             }
-            //uNode = (gpNode.right == pNode)?uNode = gpNode.left:uNode = gpNode.right;
-        }
-        
-        //if uNode is RED, reverse color or gp, p & u Node
-        if(uNode != null && uNode.color == 'R'){
-            revColor(pNode);
-            revColor(uNode);
-            revColor(gpNode);
-            root.color = 'B';//ensure root is black
+
+            //Node is outer child of gParent
+            rotateRight(gParent);
             
-            if(gpNode != null && gpNode.parent != null && gpNode.parent.color == 'R')
-                balance(gpNode);
-        }else{ //if uNode is black
-            if(pNode.isRoot()){
-                return;
+            //Recolor original parent and gParent
+            parent.color = BLACK;
+            gParent.color = RED;
+        }
+        //Parent is a right child
+        else {
+            //Node is inner child
+            if (node == parent.left) {
+                rotateRight(parent);
+
+                //For recoloring
+                parent = node;
             }
-            
-            //check if parent is a left or right child
-            char side = (pNode.isLeft()) ? 'L' : 'R';
-            if(sameDirection){
-                rotate(side, pNode);
-            }else
-                specialRotate(side, pNode);
+
+            //Node is outer child
+            rotateLeft(gParent);
+
+            //Recolor original parent and gParent
+            parent.color = BLACK;
+            gParent.color = RED;
         }
     }
-    
-    private void rotate(char side, RBNode target){
-        RBNode childNode;
-        RBNode pNode = target.parent;
+
+    private RBNode getUncle(RBNode parent) {
+        RBNode gParent = parent.parent;
+        return (gParent.left == parent) ? gParent.right : gParent.left;
+    }
+
+    // ===== Deletion =====
+
+    @Override
+    public T delete(int key) {
+        RBNode node = root;
         
-        if(side == 'L'){
-            childNode = target.right;
-            
-            if(pNode != null){
-                if(pNode.isLeft())
-                    pNode.parent.left = childNode;
-                else
-                    pNode.parent.right = childNode;
-            }else
-                root = childNode;
-            
-            childNode.parent = pNode.parent;
-
-            pNode.parent = childNode;
-            target.parent = childNode;
-            
-            if(childNode.right != null)
-                childNode.left.parent = target;
-            target.right = childNode.left;
-            childNode.left = target;
-            
-            if(childNode.right != null)
-                childNode.right.parent = pNode;
-            pNode.left = childNode.right;
-            childNode.right = pNode;
-            
-        }else{
-            childNode = target.left;
-            
-            if(pNode != null){
-                if(pNode.isLeft())
-                    pNode.parent.left = childNode;
-                else
-                    pNode.parent.right = childNode;
-            }else
-                root = childNode;
-                
-            childNode.parent = pNode.parent;
-
-            pNode.parent = childNode;
-            target.parent = childNode;
-
-            if(childNode.right != null)
-                childNode.right.parent = target;
-            target.left = childNode.right;
-            childNode.right = target;
-            
-            if(childNode.left != null)
-                childNode.left.parent = pNode;
-            pNode.right = childNode.left;
-            childNode.left = pNode;
+        while (node != null && node.hash != key) {
+            if (key < node.hash) 
+                node = node.left;
+            else 
+                node = node.right;
         }
-        revColor(pNode);
-        revColor(childNode);
-        //in case child node became root
-        if(childNode.parent == null){
-            childNode.color = 'B';
-            root = childNode;
-        }    
-    }
-    
-    private void specialRotate(char side, RBNode target){
-        RBNode childNode;
-        RBNode pNode = target.parent;
-        
-        if(side == 'L'){
-            childNode = target.right;
-            
-            if(!pNode.isRoot()){
-                if(pNode.isLeft())
-                    pNode.parent.left = target;
-                else
-                    pNode.parent.right = target;
-            }else
-                root = target;
-            
-            target.parent = pNode.parent;
 
-            pNode.parent = target;
-            target.right = pNode;
-            
-            if(childNode != null)
-                childNode.parent = pNode;
-            pNode.left = childNode;
-            
-        }else{
-            childNode = target.left;
-            
-            if(!pNode.isRoot()){
-                if(pNode.isLeft())
-                    pNode.parent.left = target;
-                else
-                    pNode.parent.right = target;
-            }else
-                root = target;
-            
-            target.parent = pNode.parent;
-
-            pNode.parent = target;
-            target.left = pNode;
-
-            if(childNode != null)
-                childNode.parent = pNode;
-            pNode.right = childNode;
-        }
-        
-        revColor(pNode);
-        revColor(target);
-        //in case target node became root
-        if(target.isRoot()){
-            target.color = 'B';
-            root = target;
-        } 
-    }
-
-    private RBNode getNode(RBNode currentNode, int hash){        
-        if(currentNode == null)
-            return null;
-
-        //less than current node
-        else if(hash < currentNode.hash)
-            currentNode = getNode(currentNode.left, hash);
-
-        //more than current node
-        else if(hash > currentNode.hash)
-            currentNode = getNode(currentNode.right, hash);
-        
-        
-        return currentNode;
-    }
-    
-    public T get(int hash){
-        RBNode result = getNode(root, hash);
-        return (result == null)?null:result.data;
-    }
-    
-    private RBNode getLargestNode(RBNode currentNode){        
-        if(currentNode.right != null)
-            currentNode = getLargestNode(currentNode.right);
-        
-        return currentNode;
-    }
-    
-    public T remove(int hash){
-        RBNode target = getNode(root, hash);
-        
-        if(target == null)
+        if (node == null)
             return null;
         
-        T result = target.data;
-        
-        if(target.hasNoChild()){
-            if(target.color == 'B')
-                removeBalance(target);
-            removeNode(target);
-        }else{
-            RBNode successor = (target.left != null) ? getLargestNode(target.left):target.right;
 
-            if(successor != null){
-                target.hash = successor.hash;
-                target.data = successor.data;
-                if (successor.color == 'B')
-                    removeBalance(successor);
+        //Which node to start resolving potential Double Black
+        RBNode movedUpNode;
+        boolean deletedNodeColor;
 
-                //remove node & color its child black
-                removeNode(successor);
-            }
+        //Node has 1 or no child
+        if (node.left == null || node.right == null) {
+            movedUpNode = dereferenceNode(node);
+            deletedNodeColor = node.color;
         }
-        elementCount --;
-        return result;
-    }
-    
-    private void removeNode(RBNode target){
-        if(target.isRight())
-            target.parent.right = target.right;
-        else
-            target.parent.left = target.left;
-        
-        if (target.right != null)
-                target.right.color = 'B';
-        
-        if (target.left != null)
-            target.left.color = 'B';
-    }
-    
-    private void removeBalance(RBNode target){
-        RBNode sibling;
-        RBNode nephew;
-        
-        if(target.isLeft()){
-            sibling = target.parent.right;
-            nephew = sibling.left;
-        }else{
-            sibling = target.parent.left;
-            nephew = sibling.right;
+
+        //Node has two children
+        else {
+            //Find minimum node of right subtree / next in-order node
+            RBNode successor = findMinimum(node.right);
+
+            //Copy successor's information to current node
+            node.hash = successor.hash;
+            node.data = successor.data;
+
+            movedUpNode = dereferenceNode(successor);
+            deletedNodeColor = successor.color;
         }
-        
-        if(sibling.color == 'B' && (nephew != null && nephew.color == 'R')){
-            rotate(sibling.isLeft()?'L':'R',sibling);
-            revColor(nephew);
-            balance(nephew);
-            
-        }else if(sibling.color == 'B' && target.color == 'B'){
-            sibling.color = 'R';
-            if(target.parent.color == 'R')
-                target.parent.color = 'B';
+
+        // No changes needed if deletedNode is RED
+        if (deletedNodeColor == BLACK) {
+            fixAfterDelete(movedUpNode);
+
+            //Remove the temporary NIL node
+            if(movedUpNode.getClass() == NilNode.class)
+                transplant(movedUpNode.parent, movedUpNode, null);
+        }
+        elementCount--;
+        return (T)node.data;
+    }
+
+    private RBNode dereferenceNode(RBNode node) {
+        if (node.left != null) {
+            transplant(node.parent, node, node.left);
+            //Return child node that switched parent
+            return node.left;
+        }
+        else if (node.right != null) {
+            transplant(node.parent, node, node.right);
+            return node.right;
+        }
+
+        // If Node is Leaf && Node is red, simply remove
+        // If Node is Leaf && Node is black, pass back BLACK to check for Double Black Situation
+        else {
+            RBNode newChild = (node.color == BLACK ? new NilNode() : null);
+            transplant(node.parent, node, newChild);
+            return newChild;
+        }
+    }
+
+    private RBNode findMinimum(RBNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
+    private void fixAfterDelete(RBNode node) {
+        if (node == root) {
+            node.color = BLACK;
+            return;
+        }
+
+        RBNode sibling = getSibling(node);
+
+        // Red sibling
+        if (sibling.color == RED) {
+            sibling.color = BLACK;
+            node.parent.color = RED;
+
+            if (node == node.parent.left)
+              rotateLeft(node.parent);
             else
-                removeBalance(target.parent);
+              rotateRight(node.parent);
             
-        }else if(sibling.color == 'R'){
-            RBNode pNode = sibling.parent;
-            
-            revColor(sibling);
-            revColor(pNode);
-            
-            if(pNode.parent == null){
-                root = sibling;
-                sibling.color = 'B';
-            }else{
-                if(pNode.isLeft())
-                    pNode.parent.left = sibling;
-                else
-                    pNode.parent.right = sibling;
+            sibling = getSibling(node); // To allow it to keep testing
+        }
+
+        // Black sibling with 2 black child
+        if (isBlack(sibling.left) && isBlack(sibling.right)) {
+            sibling.color = RED;
+
+            if (node.parent.color == RED) 
+                node.parent.color = BLACK;
+            else 
+                fixAfterDelete(node.parent);
+        }
+        // Black sibling with at least 1 red child
+        else {
+            boolean nodeIsLeftChild = node == node.parent.left;
+
+            // Black outer nephew (rotate nephew to replace sibling)
+            if (nodeIsLeftChild && isBlack(sibling.right)) {
+                sibling.left.color = BLACK;
+                sibling.color = RED;
+                rotateRight(sibling);
+                sibling = node.parent.right;
+            } else if (!nodeIsLeftChild && isBlack(sibling.left)) {
+                sibling.right.color = BLACK;
+                sibling.color = RED;
+                rotateLeft(sibling);
+                sibling = node.parent.left;
             }
-            sibling.parent = pNode.parent;
-            pNode.parent = sibling;
-            pNode.left = sibling.right;
-            sibling.right.parent = pNode;
-            sibling.right = pNode;
-            removeBalance(target);
+
+            // Red outer nephew (rotate node's parent)
+            sibling.color = node.parent.color;
+            node.parent.color = BLACK;
+            if (nodeIsLeftChild) {
+                sibling.right.color = BLACK;
+                rotateLeft(node.parent);
+            } else {
+                sibling.left.color = BLACK;
+                rotateRight(node.parent);
+            }
         }
     }
+
+    private RBNode getSibling(RBNode node) {
+        RBNode parent = node.parent;
+        if (node == parent.left) 
+            return parent.right;
+        else  
+            return parent.left;
+        
+    }
+
+    private boolean isBlack(RBNode node) {
+      return node == null || node.color == BLACK;
+    }
+
+
+    // -- Helpers for insertion and deletion ---------------------------------------------------------
+
+    private void rotateRight(RBNode node) {
+        RBNode parent = node.parent;
+        RBNode leftChild = node.left;
+
+        node.left = leftChild.right;
+        if (leftChild.right != null) 
+            leftChild.right.parent = node;
+
+        leftChild.right = node;
+        node.parent = leftChild;
+
+        transplant(parent, node, leftChild);
+    }
+
+    private void rotateLeft(RBNode node) {
+        RBNode parent = node.parent;
+        RBNode rightChild = node.right;
+
+        node.right = rightChild.left;
+        if (rightChild.left != null) {
+            rightChild.left.parent = node;
+        }
+
+        rightChild.left = node;
+        node.parent = rightChild;
+
+        transplant(parent, node, rightChild);
+    }
+
+    // Shift oldChild into parent's position
+    private void transplant(RBNode parent, RBNode oldChild, RBNode newChild) {
+        if (parent == null) 
+            root = newChild;
+        else if (parent.left == oldChild) 
+            parent.left = newChild;
+        else 
+            parent.right = newChild;
+        
+
+        if (newChild != null) 
+            newChild.parent = parent;
+        
+    }
     
+    private void arrayNavi(ArrayList<T> arr, RBNode node) {
+        if (node != null){
+            arrayNavi(arr, node.left);
+            arr.add((T)node.data);
+            arrayNavi(arr, node.right);
+        }
+    }
+    @Override
+    public Object[] toArray() {
+        ArrayList<T> arr = new ArrayList<>(elementCount);
+        arrayNavi(arr, root);
+        return arr.toArray();
+    }
+
     private class Itr implements Iterator<T>{
         RBNode prevNode;
         RBNode currentNode;
@@ -423,61 +412,32 @@ public class RBTree<T> implements CollectionInterface<T>{
             }
             count++;
             prevNode = currentNode;
-            return currentNode.data;
+            return (T)currentNode.data;
         }
-        
     }
-    
+        
     @Override
     public Iterator<T> iterator() {
         return new Itr();
     }
     
-    private void arrayNavi(ArrayList<T> arr,RBNode node) {
-        if (node != null){
-            arrayNavi(arr, node.left);
-            arr.add(node.data);
-            arrayNavi(arr, node.right);
-        }
-    }
-    
-    @Override
-    public Object[] toArray() {
-        ArrayList<T> arr = new ArrayList<>(elementCount);
-        arrayNavi(arr, root);
-        return (T[])arr.toArray();
-    }
-
     @Override
     public int size() {
         return elementCount;
     }
-    
+
     @Override
-    public void clear(){
+    public void clear() {
+        // Root = null works in Java because garbage collector will clear the tree
+        // The same cannot be said in other languages
         root = null;
-        elementCount ++;
+        elementCount = 0;
     }
     
-    @Override
+    @Override 
     public boolean isEmpty(){
-        return root == null;
-    }
-    
-    @Override
-    public String toString(){
-        StringBuilder str = new StringBuilder();
-        int i = 0;
-        
-        for(T data : this){
-            str.append(String.format("\n[%2s] %s", ++i, data));
-        }
-        return str.toString();
-    }
-    
-    
-    
-    
+        return elementCount == 0;
+    };
     
     private void inOrder(RBNode node) {
         if (node == null) 
@@ -485,9 +445,9 @@ public class RBTree<T> implements CollectionInterface<T>{
         
         inOrder(node.left);
         if(node.parent!=null)
-            System.out.printf("%s(%s)<p:%s> ", node.data, node.color, node.parent.data);
+            System.out.printf("%s(%s)<p:%s> ", node.data, node.color?'B':'R', node.parent.data);
         else
-            System.out.printf("%s(%s)<root> ", node.data, node.color);
+            System.out.printf("%s(%s)<root> ", node.data, node.color?'B':'R');
         inOrder(node.right);
     }
     public void inOrder(){
