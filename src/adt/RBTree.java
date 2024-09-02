@@ -165,11 +165,11 @@ public class RBTree<T> implements BinaryTreeInterface<T>, CollectionInterface<T>
     // ===== Deletion =====
 
     @Override
-    public T delete(int key) {
+    public T delete(int hash) {
         RBNode node = root;
         
-        while (node != null && node.hash != key) {
-            if (key < node.hash) 
+        while (node != null && node.hash != hash) {
+            if (hash < node.hash) 
                 node = node.left;
             else 
                 node = node.right;

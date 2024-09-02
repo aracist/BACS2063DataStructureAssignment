@@ -1,29 +1,55 @@
 package adt;
 
+import java.util.Objects;
+
 public class Map<K, V> implements MapInterface<K,V>{
-    ArrayList<K> keyArr;
-    ArrayList<V> valueArr;
-    int elementCount;
+    final private RBTree<mapElement> redBlackTree;
+    private int elementCount;
+    
+    private class mapElement{
+        K key;
+        V value;
+        
+        mapElement(K key, V value){
+            this.key = key;
+            this.value = value;
+        }
+        
+        @Override
+        public int hashCode(){
+            return key.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final mapElement other = (mapElement) obj;
+            return Objects.equals(this.key, other.key);
+        }
+    }
     
     public Map(){
-        keyArr = new ArrayList<>();
-        valueArr = new ArrayList<>();
+        redBlackTree = new RBTree<>();
         elementCount = 0;
     }
     
     @Override
     public boolean containsKey(K key) {
-        for(K k : keyArr){
-            if (k.equals(key))
-                return true;
-        }
-        return false;
+        return (redBlackTree.search(key.hashCode()) != null);
     }
 
     @Override
     public boolean containsValue(V value) {
-        for(V v : valueArr){
-            if (v.equals(value))
+        for(mapElement mE : redBlackTree){
+            if(mE.value.equals(value))
                 return true;
         }
         return false;
@@ -33,44 +59,47 @@ public class Map<K, V> implements MapInterface<K,V>{
     public boolean add(K key, V value) {
         if(containsKey(key))
             return false;
-        
+        redBlackTree.insert(new mapElement(key, value));
         elementCount ++;
-        keyArr.add(key);
-        valueArr.add(value);
         return true;
     }
 
     @Override
     public V get(K key) {
-        for (int position = 1; position <= elementCount; position++){
-            if(keyArr.get(position).equals(key))
-                return valueArr.get(position);
-        }
-        return null;
+        mapElement result = redBlackTree.search(key.hashCode());
+        return (result != null) ? result.value : null;
     }
 
     @Override
     public V remove(K key) {
-        V result = null;
-        for (int position = 1; position <= elementCount; position++){
-            if(keyArr.get(position).equals(key)){
-                result = valueArr.get(position);
-                keyArr.remove(position);
-                valueArr.remove(position);
-                return result;
-            }
-        }
-        return result;
+        mapElement result = redBlackTree.delete(key.hashCode());
+        return (result != null) ? result.value : null;
    }
 
     @Override
     public K[] keyArray() {
-        return (K[])keyArr.toArray();
+        K[] result = (K[])new Object[elementCount];
+        
+        int count = 0;
+        
+        for(mapElement me : redBlackTree){
+            result[count++] = me.key;
+        }
+        
+        return result;
     }
 
     @Override
     public V[] valueArray() {
-        return (V[])valueArr.toArray();
+        V[] result = (V[])new Object[elementCount];
+        
+        int count = 0;
+        
+        for(mapElement me : redBlackTree){
+            result[count++] = me.value;
+        }
+        
+        return result;    
     }
 
     @Override
@@ -83,8 +112,7 @@ public class Map<K, V> implements MapInterface<K,V>{
 
     @Override
     public void clear() {
-        keyArr = new ArrayList<>();
-        valueArr = new ArrayList<>();
+        redBlackTree.clear();
         elementCount = 0;
     }
 
