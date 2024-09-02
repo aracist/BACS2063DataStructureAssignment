@@ -83,7 +83,7 @@ public class PriorityQueue<T> implements QueueInterface<T>, CollectionInterface<
     }
     
     public void enqueue(int importance, T data){
-        Entry e = rbTree.search(0);
+        Entry e = rbTree.search(importance);
         if(e != null)
             e.linkedList.add(data);
         else
