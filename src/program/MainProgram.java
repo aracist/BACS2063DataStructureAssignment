@@ -1,6 +1,7 @@
 package program;
 import adt.ArrayList;
 import adt.LinkedList;
+import adt.Map;
 import adt.PriorityQueue;
 import adt.RBTree;
 
@@ -86,15 +87,22 @@ public class MainProgram {
 //            System.out.println((int)itarr1);
 //        }
 //        System.out.println(rbt.size());
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-        pq.enqueue(10);
-        pq.enqueue(2,20);
-        pq.enqueue(0,30);
+//        PriorityQueue<Integer> pq = new PriorityQueue<>();
+//        pq.enqueue(10);
+//        pq.enqueue(2,20);
+//        pq.enqueue(0,30);
+//        
+//        System.out.println(pq.toString());
+//        
+//        for(Integer elem : pq)
+//            System.out.println(elem);
+
+        Map<Integer, String> map = new Map<>();
+        map.add(1, "Long1");
+        map.add(0, "Long0");
+        map.add(3, "Long3");
         
-        System.out.println(pq.toString());
-        
-        for(Integer elem : pq)
-            System.out.println(elem);
+        System.out.println(map.keyArray().getClass());
     }
     
 }

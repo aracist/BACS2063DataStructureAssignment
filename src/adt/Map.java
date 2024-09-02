@@ -77,26 +77,27 @@ public class Map<K, V> implements MapInterface<K,V>{
    }
 
     @Override
-    public K[] keyArray() {
+    public <K> K[] keyArray() {
         K[] result = (K[])new Object[elementCount];
         
         int count = 0;
         
         for(mapElement me : redBlackTree){
-            result[count++] = me.key;
+            result[count++] = (K)me.key;
         }
+        System.out.println(result.getClass());
         
         return result;
     }
 
     @Override
-    public V[] valueArray() {
+    public <V> V[] valueArray() {
         V[] result = (V[])new Object[elementCount];
         
         int count = 0;
         
         for(mapElement me : redBlackTree){
-            result[count++] = me.value;
+            result[count++] = (V)me.value;
         }
         
         return result;    

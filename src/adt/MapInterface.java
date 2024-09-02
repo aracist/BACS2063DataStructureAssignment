@@ -9,8 +9,8 @@ public interface MapInterface<K, V>{
     V get(K key);
     V remove(K key);
     
-    K[] keyArray();
-    V[] valueArray();
+    <K> K[] keyArray();
+    <V> V[] valueArray();
     Object[][] elementArray();
     
     void clear();
