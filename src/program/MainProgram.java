@@ -88,8 +88,11 @@ public class MainProgram {
 //        System.out.println(rbt.size());
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         pq.enqueue(10);
-        pq.enqueue(20);
-        pq.enqueue(30);
+        pq.enqueue(2,20);
+        pq.enqueue(0,30);
+        
+        System.out.println(pq.toString());
+        
         for(Integer elem : pq)
             System.out.println(elem);
     }
