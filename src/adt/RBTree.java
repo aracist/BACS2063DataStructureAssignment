@@ -33,21 +33,18 @@ public class RBTree<T> implements BinaryTreeInterface<T>, CollectionInterface<T>
     }
     
     // ===== Insertion =====
-    public boolean insertAll(T[] dataArr){
-        return insertAll(dataArr, 1, dataArr.length);
+    public void insertAll(T[] dataArr){
+        insertAll(dataArr, 1, dataArr.length);
     }
     
-    public boolean insertAll(T[] dataArr, int startingPosition){
-        return insertAll(dataArr, startingPosition, dataArr.length);
+    public void insertAll(T[] dataArr, int startingPosition){
+        insertAll(dataArr, startingPosition, dataArr.length);
     }
     
-    public boolean insertAll(T[] dataArr, int startingPosition, int endingPosition){
+    public void insertAll(T[] dataArr, int startingPosition, int endingPosition){
         for (int i = startingPosition - 1; i < endingPosition; i++) {
-            // Failed to insert
-            if(!insert(dataArr[i]))
-                return false;
+            insert(dataArr[i]);
         }
-        return true;
     }
     
     @Override
