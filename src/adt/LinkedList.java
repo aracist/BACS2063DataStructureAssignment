@@ -178,7 +178,8 @@ public class LinkedList<T> implements ListInterface<T>, CollectionInterface<T> {
         Node<T> targetNode = getNode(position);
         if(targetNode == firstNode){
             firstNode = firstNode.next;
-            firstNode.prev = null;
+            if(firstNode != null)
+                firstNode.prev = null;
         }else if(targetNode == lastNode){
             lastNode = lastNode.prev;
             lastNode.next = null;

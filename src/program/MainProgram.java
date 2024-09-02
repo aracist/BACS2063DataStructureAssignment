@@ -1,6 +1,7 @@
 package program;
 import adt.ArrayList;
 import adt.LinkedList;
+import adt.PriorityQueue;
 import adt.RBTree;
 
 public class MainProgram {
@@ -53,38 +54,44 @@ public class MainProgram {
 //        for(String s : ll)
 //            System.out.println(s);
 //        System.out.println(ll.equals(ll));
-        RBTree<Integer> rbt = new RBTree<>();
-        rbt.insert(4);
-        rbt.insert(7);
-        rbt.insert(12);
-        rbt.insert(15);
-        rbt.insert(3);
-        rbt.insert(5);
-        rbt.insert(14);
-        rbt.insert(18);
-        rbt.insert(16);
-        rbt.insert(17);
-        rbt.insertAll(new Integer[]{6,40,10,4,19,20,11,8});
-
-//        rbt.delete(3);
-//        rbt.delete(12);
-//        rbt.delete(17);
-//        rbt.delete(18);
-//        rbt.delete(15);
-//        rbt.delete(16);
-        //System.out.println(rbt.toString());
-        //System.out.println(rbt.get(12));
-        rbt.inOrder();
-        
-        
-        
-        Object[] itarr = rbt.toArray();
-        //System.out.println(itarr.getClass());
-
-        for (Object itarr1 : itarr) {
-            System.out.println((int)itarr1);
-        }
-        System.out.println(rbt.size());
+//        RBTree<Integer> rbt = new RBTree<>();
+//        rbt.insert(4);
+//        rbt.insert(7);
+//        rbt.insert(12);
+//        rbt.insert(15);
+//        rbt.insert(3);
+//        rbt.insert(5);
+//        rbt.insert(14);
+//        rbt.insert(18);
+//        rbt.insert(16);
+//        rbt.insert(17);
+//        rbt.insertAll(new Integer[]{6,40,10,4,19,20,11,8});
+//
+////        rbt.delete(3);
+////        rbt.delete(12);
+////        rbt.delete(17);
+////        rbt.delete(18);
+////        rbt.delete(15);
+////        rbt.delete(16);
+//        //System.out.println(rbt.toString());
+//        //System.out.println(rbt.get(12));
+//        rbt.inOrder();
+//        
+//        
+//        
+//        Object[] itarr = rbt.toArray();
+//        //System.out.println(itarr.getClass());
+//
+//        for (Object itarr1 : itarr) {
+//            System.out.println((int)itarr1);
+//        }
+//        System.out.println(rbt.size());
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.enqueue(10);
+        pq.enqueue(20);
+        pq.enqueue(30);
+        for(Integer elem : pq)
+            System.out.println(elem);
     }
     
 }

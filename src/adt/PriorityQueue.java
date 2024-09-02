@@ -19,6 +19,7 @@ public class PriorityQueue<T> implements QueueInterface<T>, CollectionInterface<
         Entry(int importance, T data){
             this.importance = importance;
             this.linkedList = new LinkedList<>();
+            linkedList.add(data);
         }
         
         @Override
@@ -57,7 +58,7 @@ public class PriorityQueue<T> implements QueueInterface<T>, CollectionInterface<
         
         @Override
         public boolean hasNext() {
-            return importanceItr.hasNext() && entryItr.hasNext();
+            return importanceItr.hasNext() || entryItr.hasNext();
         }
 
         @Override
@@ -84,7 +85,7 @@ public class PriorityQueue<T> implements QueueInterface<T>, CollectionInterface<
     public void enqueue(int importance, T data){
         Entry e = rbTree.search(0);
         if(e != null)
-            e.linkedList.addLast(data);
+            e.linkedList.add(data);
         else
             rbTree.insert(new Entry(importance, data));
         
@@ -97,6 +98,7 @@ public class PriorityQueue<T> implements QueueInterface<T>, CollectionInterface<
             return null;
         
         Entry entry = rbTree.getSmallest();
+        System.out.println(entry.linkedList.size());
         T result = entry.linkedList.removeFirst();
         
         if(entry.linkedList.isEmpty())
