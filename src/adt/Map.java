@@ -1,10 +1,12 @@
 package adt;
 
+import java.util.Iterator;
 import java.util.Objects;
 
-public class Map<K, V> implements MapInterface<K,V>{
+public class Map<K, V> implements MapInterface<K,V>, Iterable{
     final private RBTree<mapElement> redBlackTree;
     private int elementCount;
+
     
     private class mapElement{
         K key;
@@ -85,7 +87,6 @@ public class Map<K, V> implements MapInterface<K,V>{
         for(mapElement me : redBlackTree){
             result[count++] = (K)me.key;
         }
-        System.out.println(result.getClass());
         
         return result;
     }
@@ -125,5 +126,25 @@ public class Map<K, V> implements MapInterface<K,V>{
     @Override
     public boolean isEmpty() {
         return elementCount == 0;
+    }
+    
+    private class Itr implements Iterator{
+        Iterator rbtitr = redBlackTree.iterator();
+
+        @Override
+        public boolean hasNext() {
+            return rbtitr.hasNext();
+        }
+
+        @Override
+        public Object next() {
+            return ((mapElement)rbtitr.next()).value;
+        }
+        
+        
+    }
+    @Override
+    public Iterator iterator() {
+        return new Itr();
     }
 }
