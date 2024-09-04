@@ -75,6 +75,7 @@ public class Map<K, V> implements MapInterface<K,V>, Iterable{
     @Override
     public V remove(K key) {
         mapElement result = redBlackTree.delete(key.hashCode());
+        elementCount--;
         return (result != null) ? result.value : null;
    }
 
