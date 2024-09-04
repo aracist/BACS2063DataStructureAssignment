@@ -5,5 +5,6 @@ public interface BinaryTreeInterface<T> {
     boolean insert(T data);
     T delete(int hash);
     int size();
+    void clear();
     boolean isEmpty();
 }
